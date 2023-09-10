@@ -60,12 +60,10 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
-	// TODO 3: Load config from XML
 	bool ret = LoadConfig();
 
 	if(ret == true)
 	{
-		// TODO 4: Read the title from the config file
 		title.Create("Video Game Template");
 		win->SetTitle(title.GetString());
 
@@ -124,6 +122,8 @@ bool App::Update()
 bool App::LoadConfig()
 {
 	bool ret = true;
+
+	// Not implented yet
 
 	return ret;
 }
