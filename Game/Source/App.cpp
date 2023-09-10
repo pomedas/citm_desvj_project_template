@@ -15,6 +15,8 @@
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
+	// L1: TODO 3: Measure the amount of ms that takes to execute the App constructor and LOG the result
+
 	frames = 0;
 
 	win = new Window();
@@ -60,6 +62,8 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
+	// L1: TODO 3: Measure the amount of ms that takes to execute the Awake and LOG the result
+
 	bool ret = LoadConfig();
 
 	if(ret == true)
@@ -83,6 +87,8 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
+	// L1: TODO 3: Measure the amount of ms that takes to execute the App Start() and LOG the result
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -137,6 +143,20 @@ void App::PrepareUpdate()
 void App::FinishUpdate()
 {
 	// This is a good place to call Load / Save functions
+
+    // L1: TODO 4: Calculate:
+	// Amount of frames since startup
+	// Amount of time since game start (use a low resolution timer)
+	// Amount of ms took the last update
+	// Amount of frames during the last second
+	// Average FPS for the whole game life
+
+	// Shows the time measurements in the window title
+	static char title[256];
+	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %I64u ",
+		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+
+	app->win->SetTitle(title);
 }
 
 // Call modules before each loop iteration
@@ -207,6 +227,8 @@ bool App::PostUpdate()
 // Called before quitting
 bool App::CleanUp()
 {
+	// L1: TODO 3: Measure the amount of ms that takes to execute the App CleanUp() and LOG the result
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.end;
