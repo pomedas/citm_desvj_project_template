@@ -90,12 +90,10 @@ private:
 	float dt;
 
 	// L1: TODO 4: Calculate some timing measures
-    // required variables are provided:
-	PerfTimer ptimer;
-
+	// required variables are provided:
 	Timer startupTime;
-	Timer frameTime;
-	Timer lastSecFrameTime;
+	PerfTimer frameTime;
+	PerfTimer lastSecFrameTime;
 
 	uint64 frameCount = 0;
 	uint32 framesPerSecond = 0;

@@ -147,7 +147,7 @@ void App::FinishUpdate()
     // L1: TODO 4: Calculate:
 	// Amount of frames since startup
 	// Amount of time since game start (use a low resolution timer)
-	// Amount of ms took the last update
+	// Amount of ms took the last update (dt)
 	// Amount of frames during the last second
 	// Average FPS for the whole game life
 
