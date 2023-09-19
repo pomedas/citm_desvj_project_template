@@ -15,7 +15,11 @@
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
-	// L1: TODO 3: Measure the amount of ms that takes to execute the App constructor and LOG the result
+	// L1: DONE 3: Measure the amount of ms that takes to execute the App constructor and LOG the result
+	Timer timer = Timer();
+	startupTime = Timer();
+	frameTime = PerfTimer();
+	lastSecFrameTime = PerfTimer();
 
 	frames = 0;
 
@@ -36,6 +40,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Render last to swap buffer
 	AddModule(render);
+
+	LOG("Timer App Constructor: %f", timer.ReadMSec());
 }
 
 // Destructor
@@ -62,7 +68,8 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
-	// L1: TODO 3: Measure the amount of ms that takes to execute the Awake and LOG the result
+	// L1: DONE 3: Measure the amount of ms that takes to execute the Awake and LOG the result
+	Timer timer = Timer();
 
 	bool ret = LoadConfig();
 
@@ -81,13 +88,16 @@ bool App::Awake()
 		}
 	}
 
+	LOG("Timer App Awake(): %f", timer.ReadMSec());
+
 	return ret;
 }
 
 // Called before the first frame
 bool App::Start()
 {
-	// L1: TODO 3: Measure the amount of ms that takes to execute the App Start() and LOG the result
+	// L1: DONE 3: Measure the amount of ms that takes to execute the App Start() and LOG the result
+	Timer timer = Timer();
 
 	bool ret = true;
 	ListItem<Module*>* item;
@@ -98,6 +108,8 @@ bool App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
+
+	LOG("Timer App Start(): %f", timer.ReadMSec());
 
 	return ret;
 }
@@ -137,6 +149,7 @@ bool App::LoadConfig()
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	frameTime.Start();
 }
 
 // ---------------------------------------------
@@ -144,12 +157,26 @@ void App::FinishUpdate()
 {
 	// This is a good place to call Load / Save functions
 
-    // L1: TODO 4: Calculate:
+    // L1: DONE 4: Calculate:
 	// Amount of frames since startup
+	frameCount++;
+
 	// Amount of time since game start (use a low resolution timer)
-	// Amount of ms took the last update
+	secondsSinceStartup = startupTime.ReadSec();
+	
+	// Amount of ms took the last update (dt)
+	dt = frameTime.ReadMs();
+
 	// Amount of frames during the last second
+	lastSecFrameCount++;
+
 	// Average FPS for the whole game life
+	if (lastSecFrameTime.ReadMs() > 1000) {
+		lastSecFrameTime.Start();
+		averageFps = (averageFps + lastSecFrameCount) / 2;
+		framesPerSecond = lastSecFrameCount; 
+		lastSecFrameCount = 0;
+	}
 
 	// Shows the time measurements in the window title
 	static char title[256];
