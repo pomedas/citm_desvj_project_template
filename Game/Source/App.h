@@ -100,10 +100,11 @@ private:
 	uint32 lastSecFrameCount = 0;
 
 	float averageFps = 0.0f;
-	float secondsSinceStartup = 0.0f;
+	uint32 secondsSinceStartup = 0;
 
-	//L02 TODO 1: Set the maximun frame duration in miliseconds.
+	//L02 DONE 1: Set the maximun frame duration in miliseconds.
 	uint32 maxFrameDuration = 16;
+
 };
 
 extern App* app;

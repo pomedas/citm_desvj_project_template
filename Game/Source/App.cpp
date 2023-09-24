@@ -157,15 +157,25 @@ void App::FinishUpdate()
 {
 	// This is a good place to call Load / Save functions
 
-	// L02: TODO 1: Cap the framerate of the gameloop
-	// L02: TODO 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
+	// L02: DONE 1: Cap the framerate of the gameloop
+	// L02: DONE 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
+
+	double currentDt = frameTime.ReadMs();
+	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
+		uint32 delay = maxFrameDuration - currentDt;
+
+		PerfTimer delayTimer = PerfTimer();
+		SDL_Delay(delay);
+		LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
+	}
+
 
     // L1: DONE 4: Calculate:
 	// Amount of frames since startup
 	frameCount++;
 
 	// Amount of time since game start (use a low resolution timer)
-	secondsSinceStartup = (float) startupTime.ReadSec();
+	secondsSinceStartup = startupTime.ReadSec();
 	
 	// Amount of ms took the last update (dt)
 	dt = (float) frameTime.ReadMs();
@@ -181,9 +191,10 @@ void App::FinishUpdate()
 		lastSecFrameCount = 0;
 	}
 
+
 	// Shows the time measurements in the window title
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %I64u ",
+	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
 		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 
 	app->win->SetTitle(title);
@@ -257,7 +268,7 @@ bool App::PostUpdate()
 // Called before quitting
 bool App::CleanUp()
 {
-	// L1: TODO 3: Measure the amount of ms that takes to execute the App CleanUp() and LOG the result
+	// L1: DONE 3: Measure the amount of ms that takes to execute the App CleanUp() and LOG the result
 	Timer timer = Timer();
 
 	bool ret = true;
