@@ -157,15 +157,18 @@ void App::FinishUpdate()
 {
 	// This is a good place to call Load / Save functions
 
+	// L02: TODO 1: Cap the framerate of the gameloop
+	// L02: TODO 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
+
     // L1: DONE 4: Calculate:
 	// Amount of frames since startup
 	frameCount++;
 
 	// Amount of time since game start (use a low resolution timer)
-	secondsSinceStartup = startupTime.ReadSec();
+	secondsSinceStartup = (float) startupTime.ReadSec();
 	
 	// Amount of ms took the last update (dt)
-	dt = frameTime.ReadMs();
+	dt = (float) frameTime.ReadMs();
 
 	// Amount of frames during the last second
 	lastSecFrameCount++;
@@ -255,6 +258,7 @@ bool App::PostUpdate()
 bool App::CleanUp()
 {
 	// L1: TODO 3: Measure the amount of ms that takes to execute the App CleanUp() and LOG the result
+	Timer timer = Timer();
 
 	bool ret = true;
 	ListItem<Module*>* item;
@@ -265,6 +269,8 @@ bool App::CleanUp()
 		ret = item->data->CleanUp();
 		item = item->prev;
 	}
+
+	LOG("Timer App CleanUp(): %f", timer.ReadMSec());
 
 	return ret;
 }

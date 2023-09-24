@@ -28,8 +28,10 @@ bool Render::Awake()
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	flags |= SDL_RENDERER_PRESENTVSYNC;
-	LOG("Using vsync");
+	// VSYNC flag is commented to control it in the game loop
+	//flags |= SDL_RENDERER_PRESENTVSYNC;
+	//LOG("Using vsync");
+	LOG("vsync OFF");
 
 	renderer = SDL_CreateRenderer(app->win->window, -1, flags);
 

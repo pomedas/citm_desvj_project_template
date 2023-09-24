@@ -89,7 +89,7 @@ private:
 	uint frames;
 	float dt;
 
-	// L1: TODO 4: Calculate some timing measures
+	// L1: DONE 4: Calculate some timing measures
     // required variables are provided:
 	Timer startupTime;
 	PerfTimer frameTime;
@@ -101,6 +101,9 @@ private:
 
 	float averageFps = 0.0f;
 	float secondsSinceStartup = 0.0f;
+
+	//L02 TODO 1: Set the maximun frame duration in miliseconds.
+	uint32 maxFrameDuration = 16;
 };
 
 extern App* app;
