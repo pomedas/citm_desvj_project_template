@@ -38,7 +38,7 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 
-	//L03: TODO 3a: Declare a Player attribute
+	//L03: TODO 3b: Declare a Player attribute
 };
 
 #endif // __SCENE_H__
