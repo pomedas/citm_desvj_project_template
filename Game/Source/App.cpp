@@ -31,6 +31,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new Textures();
 	audio = new Audio();
 	scene = new Scene();
+	entityManager = new EntityManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(scene);
+	AddModule(entityManager);
 
 	// Render last to swap buffer
 	AddModule(render);
@@ -164,7 +166,7 @@ void App::FinishUpdate()
 
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
-		uint32 delay = maxFrameDuration - currentDt;
+		uint32 delay = (uint32) (maxFrameDuration - currentDt);
 
 		PerfTimer delayTimer = PerfTimer();
 		SDL_Delay(delay);

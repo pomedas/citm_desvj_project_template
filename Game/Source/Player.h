@@ -19,14 +19,15 @@ public:
 
 	bool Start();
 
-	bool Update();
+	bool Update(float dt);
 
 	bool CleanUp();
 
 public:
 
 	//L02: TODO 2: Declare player parameters
-
+	float speed = 0.2f;
+	SDL_Texture* texture = NULL;
 };
 
 #endif // __PLAYER_H__

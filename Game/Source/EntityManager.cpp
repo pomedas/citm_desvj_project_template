@@ -79,7 +79,17 @@ Entity* EntityManager::CreateEntity(EntityType type)
 {
 	Entity* entity = nullptr; 
 
-	//L03: TODO 3: Instantiate entity according to the type and add the new entity to the list of Entities
+	//L03: TODO 3a: Instantiate entity according to the type and add the new entity to the list of Entities
+	switch (type)
+	{
+	case EntityType::PLAYER:
+		entity = new Player();
+		break;
+	default:
+		break;
+	}
+
+	entities.Add(entity);
 
 	return entity;
 }
@@ -110,7 +120,7 @@ bool EntityManager::Update(float dt)
 		pEntity = item->data;
 
 		if (pEntity->active == false) continue;
-		ret = item->data->Update();
+		ret = item->data->Update(dt);
 	}
 
 	return ret;

@@ -2,6 +2,7 @@
 #define __SCENE_H__
 
 #include "Module.h"
+#include "Player.h"
 
 struct SDL_Texture;
 
@@ -38,7 +39,9 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 
-	//L03: TODO 3a: Declare a Player attribute
+	//L03: TODO 3b: Declare a Player attribute
+	Player* player;
+
 };
 
 #endif // __SCENE_H__

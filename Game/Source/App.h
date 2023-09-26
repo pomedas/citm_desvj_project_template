@@ -5,6 +5,7 @@
 #include "List.h"
 #include "PerfTimer.h"
 #include "Timer.h"
+#include "EntityManager.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -17,6 +18,7 @@ class Render;
 class Textures;
 class Audio;
 class Scene;
+class EntityManager;
 
 class App
 {
@@ -80,6 +82,7 @@ public:
 	Textures* tex;
 	Audio* audio;
 	Scene* scene;
+	EntityManager* entityManager;
 
 private:
 
@@ -107,7 +110,7 @@ private:
 	uint32 secondsSinceStartup = 0;
 
 	//L02 DONE 1: Set the maximun frame duration in miliseconds.
-	uint32 maxFrameDuration = 16;
+	uint32 maxFrameDuration = 128;
 
 };
 

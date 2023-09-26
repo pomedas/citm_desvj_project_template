@@ -25,6 +25,7 @@ bool Scene::Awake()
 	bool ret = true;
 
 	//L03: TODO 3b: Instantiate the player using the entity manager
+	app->entityManager->CreateEntity(EntityType::PLAYER);
 
 	return ret;
 }
@@ -44,8 +45,8 @@ bool Scene::Start()
 	//Get the size of the texture
 	app->tex->GetSize(img, texW, texH);
 
-	textPosX = windowW / 2 - texW / 2;
-	textPosY = windowH / 2 - texH / 2;
+	textPosX = (float)windowW / 2 - (float)texW / 2;
+	textPosY = (float)windowH / 2 - (float)texH / 2;
 
 	return true;
 }
@@ -63,19 +64,19 @@ bool Scene::Update(float dt)
 	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y -= ceil(camSpeed * dt);
+		app->render->camera.y -= (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y += ceil(camSpeed * dt);
+		app->render->camera.y += (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x -= ceil(camSpeed * dt);
+		app->render->camera.x -= (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x += ceil(camSpeed * dt);
+		app->render->camera.x += (int)ceil(camSpeed * dt);
 
 	// Renders the image in the center of the screen 
-	app->render->DrawTexture(img, textPosX, textPosY);
+	app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
 	return true;
 }
