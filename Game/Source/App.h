@@ -110,7 +110,7 @@ private:
 	uint32 secondsSinceStartup = 0;
 
 	//L02 DONE 1: Set the maximun frame duration in miliseconds.
-	uint32 maxFrameDuration = 128;
+	uint32 maxFrameDuration = 16;
 
 };
 
