@@ -29,7 +29,7 @@ bool Player::Start() {
 	return true;
 }
 
-bool Player::Update()
+bool Player::Update(float dt)
 {
 	//L03: TODO 4: render the player texture and modify the position of the player using WSAD keys and render the texture
 
