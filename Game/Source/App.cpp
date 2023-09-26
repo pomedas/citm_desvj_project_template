@@ -23,6 +23,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	frames = 0;
 
+	// L3: TODO 1: Add the EntityManager Module to App
+
 	win = new Window();
 	input = new Input();
 	render = new Render();
@@ -166,7 +168,7 @@ void App::FinishUpdate()
 
 		PerfTimer delayTimer = PerfTimer();
 		SDL_Delay(delay);
-		LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
+		//LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
 	}
 
 

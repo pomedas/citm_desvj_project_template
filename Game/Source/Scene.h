@@ -37,6 +37,8 @@ private:
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
+
+	//L03: TODO 3a: Declare a Player attribute
 };
 
 #endif // __SCENE_H__

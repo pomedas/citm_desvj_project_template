@@ -8,6 +8,8 @@
 
 #include "PugiXml/src/pugixml.hpp"
 
+// L03: TODO 1: Add the EntityManager Module to App
+
 // Modules
 class Window;
 class Input;
@@ -68,6 +70,8 @@ private:
 	bool PostUpdate();
 
 public:
+
+	// L03: TODO 1: Add the EntityManager Module to App
 
 	// Modules
 	Window* win;

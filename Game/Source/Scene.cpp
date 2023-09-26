@@ -24,6 +24,8 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
+	//L03: TODO 3b: Instantiate the player using the entity manager
+
 	return ret;
 }
 
@@ -72,7 +74,7 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += ceil(camSpeed * dt);
 
-	// Renders the image in the center of the screen
+	// Renders the image in the center of the screen 
 	app->render->DrawTexture(img, textPosX, textPosY);
 
 	return true;
