@@ -17,7 +17,7 @@ EntityManager::~EntityManager()
 {}
 
 // Called before render is available
-bool EntityManager::Awake()
+bool EntityManager::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Entity Manager");
 	bool ret = true;
@@ -79,11 +79,13 @@ Entity* EntityManager::CreateEntity(EntityType type)
 {
 	Entity* entity = nullptr; 
 
-	//L03: TODO 3a: Instantiate entity according to the type and add the new entity to the list of Entities
 	switch (type)
 	{
 	case EntityType::PLAYER:
 		entity = new Player();
+		break;
+	case EntityType::ITEM:
+		entity = new Item();
 		break;
 	default:
 		break;

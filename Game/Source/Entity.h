@@ -6,11 +6,12 @@
 #include "Input.h"
 #include "Render.h"
 
-struct Collider;
+class PhysBody;
 
 enum class EntityType
 {
 	PLAYER,
+	ITEM,
 	UNKNOWN
 };
 
@@ -67,6 +68,10 @@ public:
 			CleanUp();
 		}
 	}
+
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
+
+	};
 
 public:
 

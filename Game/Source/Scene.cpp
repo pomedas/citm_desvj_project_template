@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "Map.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -19,13 +20,23 @@ Scene::~Scene()
 {}
 
 // Called before render is available
-bool Scene::Awake()
+bool Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//L03: TODO 3b: Instantiate the player using the entity manager
-	app->entityManager->CreateEntity(EntityType::PLAYER);
+	// iterate all objects in the scene
+	// Check https://pugixml.org/docs/quickstart.html#access
+	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	{
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item->parameters = itemNode;
+	}
+
+	if (config.child("player")) {
+		player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+		player->parameters = config.child("player");
+	}
 
 	return ret;
 }
@@ -34,7 +45,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	// NOTE: We have to avoid the use of paths in the code, we will move it later to a config file
-	img = app->tex->Load("Assets/Textures/test.png");
+	//img = app->tex->Load("Assets/Textures/test.png");
 	
 	//Music is commented so that you can add your own music
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
@@ -48,6 +59,15 @@ bool Scene::Start()
 	textPosX = (float)windowW / 2 - (float)texW / 2;
 	textPosY = (float)windowH / 2 - (float)texH / 2;
 
+	app->map->Load();
+
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+		app->map->mapData.width,
+		app->map->mapData.height,
+		app->map->mapData.tileWidth,
+		app->map->mapData.tileHeight,
+		app->map->mapData.tilesets.Count());
+
 	return true;
 }
 
@@ -60,7 +80,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	//L02 DONE 3: Make the camera movement independent of framerate
 	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -76,7 +95,7 @@ bool Scene::Update(float dt)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
 	// Renders the image in the center of the screen 
-	app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
+	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
 	return true;
 }

@@ -5,6 +5,8 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Scene.h"
+#include "Map.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -15,7 +17,6 @@
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
-	// L1: DONE 3: Measure the amount of ms that takes to execute the App constructor and LOG the result
 	Timer timer = Timer();
 	startupTime = Timer();
 	frameTime = PerfTimer();
@@ -23,15 +24,16 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	frames = 0;
 
-	// L3: TODO 1: Add the EntityManager Module to App
-
 	win = new Window();
 	input = new Input();
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
+	physics = new Physics();
 	scene = new Scene();
+	map = new Map();
 	entityManager = new EntityManager();
+
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -39,7 +41,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(physics);
 	AddModule(scene);
+	AddModule(map);
 	AddModule(entityManager);
 
 	// Render last to swap buffer
@@ -72,14 +76,13 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
-	// L1: DONE 3: Measure the amount of ms that takes to execute the Awake and LOG the result
 	Timer timer = Timer();
 
 	bool ret = LoadConfig();
 
 	if(ret == true)
 	{
-		title.Create("Video Game Template");
+		title = configNode.child("app").child("title").child_value(); 
 		win->SetTitle(title.GetString());
 
 		ListItem<Module*>* item;
@@ -87,7 +90,11 @@ bool App::Awake()
 
 		while(item != NULL && ret == true)
 		{
-			ret = item->data->Awake();
+			// If the section with the module name exists in config.xml, fill the pointer with the valid xml_node
+			// that can be used to read all variables for that module.
+			// Send nullptr if the node does not exist in config.xml
+			pugi::xml_node node = configNode.child(item->data->name.GetString());
+			ret = item->data->Awake(node);
 			item = item->next;
 		}
 	}
@@ -100,7 +107,6 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
-	// L1: DONE 3: Measure the amount of ms that takes to execute the App Start() and LOG the result
 	Timer timer = Timer();
 
 	bool ret = true;
@@ -143,9 +149,16 @@ bool App::Update()
 // Load config from XML file
 bool App::LoadConfig()
 {
-	bool ret = true;
+	bool ret = false;
+	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
 
-	// Not implented yet
+	if (parseResult) {
+		ret = true;
+		configNode = configFile.child("config");
+	}
+	else {
+		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+	}
 
 	return ret;
 }
@@ -160,10 +173,6 @@ void App::PrepareUpdate()
 void App::FinishUpdate()
 {
 	// This is a good place to call Load / Save functions
-
-	// L02: DONE 1: Cap the framerate of the gameloop
-	// L02: DONE 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
-
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
 		uint32 delay = (uint32) (maxFrameDuration - currentDt);
@@ -173,8 +182,6 @@ void App::FinishUpdate()
 		//LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
 	}
 
-
-    // L1: DONE 4: Calculate:
 	// Amount of frames since startup
 	frameCount++;
 
@@ -272,7 +279,6 @@ bool App::PostUpdate()
 // Called before quitting
 bool App::CleanUp()
 {
-	// L1: DONE 3: Measure the amount of ms that takes to execute the App CleanUp() and LOG the result
 	Timer timer = Timer();
 
 	bool ret = true;

@@ -21,21 +21,22 @@ Render::~Render()
 {}
 
 // Called before render is available
-bool Render::Awake()
+bool Render::Awake(pugi::xml_node& config)
 {
 	LOG("Create SDL rendering context");
 	bool ret = true;
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	// VSYNC flag is commented to control it in the game loop
-	//flags |= SDL_RENDERER_PRESENTVSYNC;
-	//LOG("Using vsync");
-	LOG("vsync OFF");
+	if (config.child("vsync").attribute("value").as_bool(true) == true)
+	{
+		flags |= SDL_RENDERER_PRESENTVSYNC;
+		LOG("Using vsync");
+	}
 
 	renderer = SDL_CreateRenderer(app->win->window, -1, flags);
 
-	if(renderer == NULL)
+	if (renderer == NULL)
 	{
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;

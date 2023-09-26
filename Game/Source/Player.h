@@ -23,11 +23,14 @@ public:
 
 	bool CleanUp();
 
-public:
+	void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	//L02: TODO 2: Declare player parameters
+public:
 	float speed = 0.2f;
+	const char* texturePath;
 	SDL_Texture* texture = NULL;
+	PhysBody* pbody;
+	int pickCoinFxId;
 };
 
 #endif // __PLAYER_H__
