@@ -17,7 +17,7 @@ EntityManager::~EntityManager()
 {}
 
 // Called before render is available
-bool EntityManager::Awake()
+bool EntityManager::Awake(pugi::xml_node config)
 {
 	LOG("Loading Entity Manager");
 	bool ret = true;

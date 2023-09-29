@@ -1,2 +1,25 @@
 <!-- Config file for the game -->
-<!-- L01: TODO 1: Create configuration file-->
+<!-- L01: DONE 1: Create configuration file-->
+<config>
+  <app>
+    <title>My video game</title>
+    <maxFrameDuration value="16"/>
+  </app>
+
+  <renderer>
+    <vsync value="false"/>
+  </renderer>
+
+  <window>
+    <resolution width="1280" height="720" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <scene>
+    <player x="100" y="100" texturePath="Assets/Textures/player1.png"/>
+  </scene>
+  
+</config>

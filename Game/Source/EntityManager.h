@@ -15,7 +15,7 @@ public:
 	virtual ~EntityManager();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node config);
 
 	// Called after Awake
 	bool Start();

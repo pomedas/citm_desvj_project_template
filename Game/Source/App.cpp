@@ -79,22 +79,24 @@ bool App::Awake()
 
 	if(ret == true)
 	{
-		// L04: TODO 3: Read the title from the config file and set the windows title 
+		// L04: DONE 3: Read the title from the config file and set the windows title 
 		// substitute "Video Game Template" string from the value of the title in the config file
-		gameTitle.Create("Video Game Template");
+		// also read maxFrameDuration 
+		gameTitle.Create(configFile.child("config").child("app").child("title").child_value());
 		win->SetTitle(gameTitle.GetString());
+		maxFrameDuration = configFile.child("config").child("app").child("maxFrameDuration").attribute("value").as_int();
 
 		ListItem<Module*>* item;
 		item = modules.start;
 
 		while(item != NULL && ret == true)
 		{
-			// L04: TODO 4: Add a new argument to the Awake method to receive a pointer to an xml node.
+			// L04: DONE 4: Add a new argument to the Awake method to receive a pointer to an xml node.
 			// If the section with the module name exists in config.xml, fill the pointer with the valid xml_node
 			// that can be used to read all variables for that module.
 			// Send nullptr if the node does not exist in config.xml
 
-			ret = item->data->Awake();
+			ret = item->data->Awake(configFile.child("config").child(item->data->name.GetString()));
 			item = item->next;
 		}
 	}
@@ -152,10 +154,20 @@ bool App::LoadConfig()
 {
 	bool ret = true;
 
-	// L04: TODO 2: Load config.xml file using load_file() method from the xml_document class
+	// L04: DONE 2: Load config.xml file using load_file() method from the xml_document class
 	// If the result is ok get the main node of the XML
 	// else, log the error
 	// check https://pugixml.org/docs/quickstart.html#loading
+
+	pugi::xml_parse_result result = configFile.load_file("config.xml");
+	if (result)
+	{
+		LOG("config.xml parsed without errors");
+	}
+	else
+	{
+		LOG("Error loading config.xml: %s",result.description());
+	}
 
 	return ret;
 }

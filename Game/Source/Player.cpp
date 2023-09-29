@@ -20,14 +20,14 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//L03: DONE 2: Initialize Player parameters
-	position = iPoint(0, 0);
+	position = iPoint(config.attribute("x").as_int(), config.attribute("y").as_int());
 
 	return true;
 }
 
 bool Player::Start() {
 
-	texture = app->tex->Load("Assets/Textures/player1.png");
+	texture = app->tex->Load(config.attribute("texturePath").as_string());
 	return true;
 }
 

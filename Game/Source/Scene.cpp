@@ -19,7 +19,7 @@ Scene::~Scene()
 {}
 
 // Called before render is available
-bool Scene::Awake()
+bool Scene::Awake(pugi::xml_node config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -27,6 +27,9 @@ bool Scene::Awake()
 	//L03: DONE 3b: Instantiate the player using the entity manager
 	//L04 TODO 7: Get player paremeters
 	player = (Player*) app->entityManager->CreateEntity(EntityType::PLAYER);
+	//Assigns the XML node to a member in player
+	player->config = config.child("player");
+
 	return ret;
 }
 
