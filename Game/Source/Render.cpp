@@ -28,6 +28,7 @@ bool Render::Awake()
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
+	// L04: TODO 6: Load the VSYNC status from config.xml and adapt the code to set it on / off
 	// VSYNC flag is commented to control it in the game loop
 	//flags |= SDL_RENDERER_PRESENTVSYNC;
 	//LOG("Using vsync");

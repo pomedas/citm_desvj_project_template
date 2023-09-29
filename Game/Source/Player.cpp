@@ -19,7 +19,7 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	//L03: TODO 2: Initialize Player parameters
+	//L03: DONE 2: Initialize Player parameters
 	position = iPoint(0, 0);
 
 	return true;
@@ -33,7 +33,7 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-	//L03: TODO 4: render the player texture and modify the position of the player using WSAD keys and render the texture
+	//L03: DONE 4: render the player texture and modify the position of the player using WSAD keys and render the texture
 	
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		position.y -= (int) (speed * dt);

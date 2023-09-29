@@ -39,7 +39,7 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 
-	//L03: TODO 3b: Declare a Player attribute
+	//L03: DONE 3b: Declare a Player attribute
 	Player* player;
 
 };

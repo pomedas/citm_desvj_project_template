@@ -24,9 +24,9 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//L03: TODO 3b: Instantiate the player using the entity manager
-	app->entityManager->CreateEntity(EntityType::PLAYER);
-
+	//L03: DONE 3b: Instantiate the player using the entity manager
+	//L04 TODO 7: Get player paremeters
+	player = (Player*) app->entityManager->CreateEntity(EntityType::PLAYER);
 	return ret;
 }
 

@@ -34,8 +34,12 @@ bool Window::Awake()
 	{
 		// Create window
 		Uint32 flags = SDL_WINDOW_SHOWN;
-		bool fullscreen = false;
-		bool borderless = false;
+
+		// L04: TODO 5: Load all required configurations from config.xml
+		// Tip: get the name of the child and the attribute value
+		// Get values of fullscreen, borderless, resizable,fullscreen_window, width, height and scale from config files
+		bool fullscreen = false; 
+		bool borderless = false; 
 		bool resizable = false;
 		bool fullscreen_window = false;
 

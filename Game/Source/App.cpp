@@ -23,7 +23,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	frames = 0;
 
-	// L3: TODO 1: Add the EntityManager Module to App
+	// L3: DONE 1: Add the EntityManager Module to App
 
 	win = new Window();
 	input = new Input();
@@ -79,14 +79,21 @@ bool App::Awake()
 
 	if(ret == true)
 	{
-		title.Create("Video Game Template");
-		win->SetTitle(title.GetString());
+		// L04: TODO 3: Read the title from the config file and set the windows title 
+		// substitute "Video Game Template" string from the value of the title in the config file
+		gameTitle.Create("Video Game Template");
+		win->SetTitle(gameTitle.GetString());
 
 		ListItem<Module*>* item;
 		item = modules.start;
 
 		while(item != NULL && ret == true)
 		{
+			// L04: TODO 4: Add a new argument to the Awake method to receive a pointer to an xml node.
+			// If the section with the module name exists in config.xml, fill the pointer with the valid xml_node
+			// that can be used to read all variables for that module.
+			// Send nullptr if the node does not exist in config.xml
+
 			ret = item->data->Awake();
 			item = item->next;
 		}
@@ -145,7 +152,10 @@ bool App::LoadConfig()
 {
 	bool ret = true;
 
-	// Not implented yet
+	// L04: TODO 2: Load config.xml file using load_file() method from the xml_document class
+	// If the result is ok get the main node of the XML
+	// else, log the error
+	// check https://pugixml.org/docs/quickstart.html#loading
 
 	return ret;
 }
@@ -197,9 +207,10 @@ void App::FinishUpdate()
 
 
 	// Shows the time measurements in the window title
+	// check sprintf formats here https://cplusplus.com/reference/cstdio/printf/
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
-		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+	sprintf_s(title, 256, "%s: Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ", 
+		gameTitle.GetString(), averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 
 	app->win->SetTitle(title);
 }
@@ -308,7 +319,7 @@ const char* App::GetArgv(int index) const
 // ---------------------------------------
 const char* App::GetTitle() const
 {
-	return title.GetString();
+	return gameTitle.GetString();
 }
 
 // ---------------------------------------

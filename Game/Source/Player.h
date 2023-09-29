@@ -25,7 +25,7 @@ public:
 
 public:
 
-	//L02: TODO 2: Declare player parameters
+	//L02: DONE 2: Declare player parameters
 	float speed = 0.2f;
 	SDL_Texture* texture = NULL;
 };
