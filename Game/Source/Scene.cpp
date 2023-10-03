@@ -32,7 +32,8 @@ bool Scene::Awake(pugi::xml_node config)
 	player->config = config.child("player");
 
 	//Get the map name from the config file and assigns the value in the module
-	app->map->mapFileName = config.child("map").attribute("path").as_string();
+	app->map->name = config.child("map").attribute("name").as_string();
+	app->map->path = config.child("map").attribute("path").as_string();
 
 	return ret;
 }

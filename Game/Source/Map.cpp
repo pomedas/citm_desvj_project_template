@@ -31,7 +31,10 @@ bool Map::Awake(pugi::xml_node config)
 bool Map::Start() {
 
     //Calls the functon to load the map, make sure that the filename is assigned
-    Load(mapFileName);
+    SString mapPath = path;
+    mapPath += name;
+    Load(mapPath);
+
     return true;
 }
 
@@ -62,26 +65,22 @@ bool Map::CleanUp()
 bool Map::Load(SString mapFileName)
 {
     bool ret = true;
-
     pugi::xml_document mapFileXML;
-    pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
 
-    if(result == NULL)
-    {
-        LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
-        ret = false;
-    }
+    // L05: TODO 3: Implement LoadMap to load the map properties
+    // retrieve the paremeters of the <map> node and save it into map data
 
-    if(ret == true)
-    {
-        ret = LoadMap(mapFileXML);
-    }
+    //Fill mapData variable
+         
+    // L05: TODO 4: Implement the LoadTileSet function to load the tileset properties
+    //ret = false; // Remove this line when implementing the function
 
-    if (ret == true)
-    {
-        ret = LoadTileSet(mapFileXML);
-    }
+    //Iterate the Tileset
 
+      //Load Tileset attributes
+
+      //Load Tileset image
+   
     // L05: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
     if(ret == true)
     {
@@ -103,31 +102,4 @@ bool Map::Load(SString mapFileName)
 
     return ret;
 }
-
-bool Map::LoadMap(pugi::xml_node mapFile)
-{
-    bool ret = true;
-
-    // L05: TODO 3: Implement LoadMap to load the map properties
-    //ret = false; // Remove this line when implementing the function
-
-    return ret;
-}
-
-bool Map::LoadTileSet(pugi::xml_node mapFile){
-
-    bool ret = true; 
-
-    // L05: TODO 4: Implement the LoadTileSet function to load the tileset properties
-    //ret = false; // Remove this line when implementing the function
-
-    //Iterate the Tileset
-    
-      //Load Tileset attributes
-
-      //Load Tileset image
-
-    return ret;
-}
-
 

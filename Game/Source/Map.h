@@ -36,16 +36,12 @@ public:
     // Load new map
     bool Load(SString mapFileName);
 
-private:
-
-	bool LoadMap(pugi::xml_node mapFile);
-    bool LoadTileSet(pugi::xml_node mapFile);
-
 public: 
-    SString mapFileName;
-	// L05: TODO 1: Declare a variable data of the struct MapData
+    SString name;
+    SString path;
 
 private:
+    // L05: TODO 1: Declare a variable data of the struct MapData
     bool mapLoaded;
 };
 
