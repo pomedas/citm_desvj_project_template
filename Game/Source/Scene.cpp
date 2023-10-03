@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "Map.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -29,6 +30,9 @@ bool Scene::Awake(pugi::xml_node config)
 	player = (Player*) app->entityManager->CreateEntity(EntityType::PLAYER);
 	//Assigns the XML node to a member in player
 	player->config = config.child("player");
+
+	//Get the map name from the config file and assigns the value in the module
+	app->map->mapFileName = config.child("map").attribute("path").as_string();
 
 	return ret;
 }
@@ -79,7 +83,7 @@ bool Scene::Update(float dt)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
 	// Renders the image in the center of the screen 
-	app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
+	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
 	return true;
 }

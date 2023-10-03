@@ -20,6 +20,7 @@
 
   <scene>
     <player x="100" y="100" texturePath="Assets/Textures/player1.png"/>
+	<map path="Assets/Maps/Hello.tmx"/>
   </scene>
   
 </config>
