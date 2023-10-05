@@ -22,6 +22,13 @@ struct TileSet
     SDL_Texture* texture;
 };
 
+struct MapLayer
+{
+    // L06: TODO 1: Add the info to the MapLayer Struct
+    // 
+    // L06: TODO 6: Short function to get the gid value of x,y
+};
+
 struct MapData
 {
     int width;
@@ -29,6 +36,8 @@ struct MapData
     int tilewidth;
     int tileheight;
     List<TileSet*> tilesets;
+
+    // L06: TODO 2: Add a list/array of layers to the map
 };
 
 // L05: DONE 2: Create a struct to hold information for a TileSet
@@ -57,6 +66,10 @@ public:
 
     // Load new map
     bool Load(SString mapFileName);
+    
+    // L06
+    bool LoadLayer(pugi::xml_node node, MapLayer* layer);
+    bool LoadAllLayers(pugi::xml_node mapNode);
 
 public: 
     SString name;
