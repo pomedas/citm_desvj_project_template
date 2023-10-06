@@ -38,6 +38,12 @@ bool Scene::Awake(pugi::xml_node& config)
 		player->parameters = config.child("player");
 	}
 
+	if (config.child("map")) {
+		//Get the map name from the config file and assigns the value in the module
+		app->map->name = config.child("map").attribute("name").as_string();
+		app->map->path = config.child("map").attribute("path").as_string();
+	}
+
 	return ret;
 }
 
@@ -58,8 +64,6 @@ bool Scene::Start()
 
 	textPosX = (float)windowW / 2 - (float)texW / 2;
 	textPosY = (float)windowH / 2 - (float)texH / 2;
-
-	app->map->Load();
 
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,

@@ -88,7 +88,7 @@ private:
 
 	int argc;
 	char** args;
-	SString title;
+	SString gameTitle;
 	SString organization;
 
 	List<Module *> modules;

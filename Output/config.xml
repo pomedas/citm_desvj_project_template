@@ -1,7 +1,7 @@
 <config>
   <app>
-    <title>Game Development Testbed</title>
-    <organization>CITM</organization>
+    <title>Game Development template</title>
+    <maxFrameDuration value="16"/>
   </app>
 
   <renderer>
@@ -22,6 +22,7 @@
   </audio>
 
   <scene>
+    <map path="Assets/Maps/" name="MapTemplate.tmx"/>
     <player x="400" y="352" texturepath="Assets/Textures/player1.png"/>
     <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
@@ -29,10 +30,5 @@
     <item x="200" y="672" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/>
   </scene>
-
-  <map>
-    <mapfolder path="Assets/Maps/"/>
-    <mapfile path="Assets/Maps/MapTemplate.tmx"/>
-  </map>
   
 </config>

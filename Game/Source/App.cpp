@@ -82,8 +82,9 @@ bool App::Awake()
 
 	if(ret == true)
 	{
-		title = configNode.child("app").child("title").child_value(); 
-		win->SetTitle(title.GetString());
+		gameTitle = configNode.child("app").child("title").child_value();
+		win->SetTitle(gameTitle.GetString());
+		maxFrameDuration = configFile.child("config").child("app").child("maxFrameDuration").attribute("value").as_int();
 
 		ListItem<Module*>* item;
 		item = modules.start;
@@ -205,8 +206,8 @@ void App::FinishUpdate()
 
 	// Shows the time measurements in the window title
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
-		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+	sprintf_s(title, 256, "%s: Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
+		gameTitle.GetString(), averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 
 	app->win->SetTitle(title);
 }
@@ -314,7 +315,7 @@ const char* App::GetArgv(int index) const
 // ---------------------------------------
 const char* App::GetTitle() const
 {
-	return title.GetString();
+	return gameTitle.GetString();
 }
 
 // ---------------------------------------

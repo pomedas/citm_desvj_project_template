@@ -26,8 +26,15 @@ bool Map::Awake(pugi::xml_node& config)
     LOG("Loading Map Parser");
     bool ret = true;
 
-    mapFileName = config.child("mapfile").attribute("path").as_string();
-    mapFolder = config.child("mapfolder").attribute("path").as_string();
+    return ret;
+}
+
+bool Map::Start() {
+
+    //Calls the functon to load the map, make sure that the filename is assigned
+    SString mapPath = path;
+    mapPath += name;
+    bool ret = Load(mapPath);
 
     return ret;
 }
@@ -148,7 +155,7 @@ bool Map::CleanUp()
 }
 
 // Load new map
-bool Map::Load()
+bool Map::Load(SString mapFileName)
 {
     bool ret = true;
 
@@ -157,7 +164,7 @@ bool Map::Load()
 
     if(result == NULL)
     {
-        LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
+        LOG("Could not load map xml file %s. pugi error: %s", mapFileName.GetString(), result.description());
         ret = false;
     }
 
@@ -204,6 +211,8 @@ bool Map::Load()
             LOG("spacing : %d margin : %d", tileset->data->spacing, tileset->data->margin);
             tileset = tileset->next;
         }
+
+        LOG("Layers----");
 
         ListItem<MapLayer*>* mapLayer;
         mapLayer = mapData.maplayers.start;
@@ -263,8 +272,9 @@ bool Map::LoadTileSet(pugi::xml_node mapFile){
         set->columns = tileset.attribute("columns").as_int();
         set->tilecount = tileset.attribute("tilecount").as_int();
 
-        SString tmp("%s%s", mapFolder.GetString(), tileset.child("image").attribute("source").as_string());
-        set->texture = app->tex->Load(tmp.GetString());
+        SString texPath = path; 
+        texPath += tileset.child("image").attribute("source").as_string();
+        set->texture = app->tex->Load(texPath.GetString());
 
         mapData.tilesets.Add(set);
     }
