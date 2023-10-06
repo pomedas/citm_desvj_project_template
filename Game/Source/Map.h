@@ -20,12 +20,15 @@ struct TileSet
     int columns;
 
     SDL_Texture* texture;
+
+    // L06: TODO 7: Implement the method that receives the gid and returns a Rect
+
 };
 
 struct MapLayer
 {
     // L06: TODO 1: Add the info to the MapLayer Struct
-    // 
+     
     // L06: TODO 6: Short function to get the gid value of x,y
 };
 
@@ -67,10 +70,6 @@ public:
     // Load new map
     bool Load(SString mapFileName);
     
-    // L06
-    bool LoadLayer(pugi::xml_node node, MapLayer* layer);
-    bool LoadAllLayers(pugi::xml_node mapNode);
-
 public: 
     SString name;
     SString path;

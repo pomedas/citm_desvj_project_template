@@ -46,8 +46,16 @@ bool Map::Update(float dt)
         return false;
 
     // L06: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+    
+    // iterates the layers in the map
 
-        // iterates the layers in the map
+        //iterate all tiles in a layer
+
+        //Get the gid from tile
+
+        //Get the Rect from the tileSetTexture;
+
+        //Get the screen coordinates from the tile coordinates
 
     // L06: TODO 9: Complete the draw function
     
@@ -69,6 +77,8 @@ bool Map::CleanUp()
     }
 
     mapData.tilesets.Clear();
+
+    // L06: TODO 2: clean up all layer data
 
     return true;
 }
@@ -141,6 +151,17 @@ bool Map::Load(SString mapFileName)
             }
         }
 
+        // L06: TODO 3: Iterate all layers in the TMX and load each of them
+
+            // L06: TODO 4: Implement a function that loads a single layer layer
+            //Load the attributes and saved in a new MapLayer
+
+            //Reserve the memory for the data 
+
+            //Iterate over all the tiles and assign the values in the data array
+
+            //add the layer to the map
+
         if (mapFileXML) mapFileXML.reset();
     }
 
@@ -148,31 +169,7 @@ bool Map::Load(SString mapFileName)
     return ret;
 }
 
-// L06: TODO 3: Implement a function that loads a single layer layer
-bool Map::LoadLayer(pugi::xml_node node, MapLayer* layer)
-{
-    bool ret = true;
+// L06: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
 
-    //Load the attributes
-
-    //Reserve the memory for the data 
-
-    //Iterate over all the tiles and assign the values
-
-    return ret;
-}
-
-// L06: TODO 4: Iterate all layers and load each of them
-bool Map::LoadAllLayers(pugi::xml_node mapNode) {
-    bool ret = true;
-
-    // Iterates the layer nodes in the XML 
-    // 
-        //Load the layer
-
-        //add the layer to the map
-
-    return ret;
-}
 
 
