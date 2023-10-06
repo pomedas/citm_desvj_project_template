@@ -20,13 +20,34 @@ struct TileSet
     int columns;
 
     SDL_Texture* texture;
+
+    SDL_Rect GetRect(uint gid) {
+        SDL_Rect rect = { 0 };
+
+        int relativeIndex = gid - firstgid;
+        rect.w = tilewidth;
+        rect.h = tileheight;
+        rect.x = margin + (tilewidth + spacing) * (relativeIndex % columns);
+        rect.y = margin + (tileheight + spacing) * (relativeIndex / columns);
+
+        return rect;
+    }
 };
 
 struct MapLayer
 {
     // L06: TODO 1: Add the info to the MapLayer Struct
-    // 
+    int id;
+    SString name;
+    int width;
+    int height;
+    uint* tiles;
+
     // L06: TODO 6: Short function to get the gid value of x,y
+    uint Get(int x, int y) const
+    {
+        return tiles[(y * width) + x];
+    }
 };
 
 struct MapData
@@ -38,6 +59,7 @@ struct MapData
     List<TileSet*> tilesets;
 
     // L06: TODO 2: Add a list/array of layers to the map
+    List<MapLayer*> layers;
 };
 
 // L05: DONE 2: Create a struct to hold information for a TileSet
@@ -66,10 +88,9 @@ public:
 
     // Load new map
     bool Load(SString mapFileName);
-    
-    // L06
-    bool LoadLayer(pugi::xml_node node, MapLayer* layer);
-    bool LoadAllLayers(pugi::xml_node mapNode);
+
+    // L06: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+    iPoint MapToWorld(int x, int y) const;
 
 public: 
     SString name;

@@ -45,12 +45,31 @@ bool Map::Update(float dt)
     if(mapLoaded == false)
         return false;
 
-    // L06: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+    ListItem<MapLayer*>* mapLayer; 
+    mapLayer = mapData.layers.start;
 
-        // iterates the layers in the map
+    // iterates the layers in the map
+    while (mapLayer != NULL) {
 
-    // L06: TODO 9: Complete the draw function
-    
+        // L06: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+        for (int i = 0; i < mapData.width;i++) {
+            for (int j = 0; j < mapData.height; j++) {
+                //Get the gid from tile
+                int gid = mapLayer->data->Get(i, j);
+                //Get the Rect from the tileSetTexture;
+                SDL_Rect tileRect = mapData.tilesets.start->data->GetRect(gid);
+                //Get the screen coordinates from the tile coordinates
+                iPoint mapCoord = MapToWorld(i, j);
+
+                // L06: TODO 9: Complete the draw function
+                app->render->DrawTexture(mapData.tilesets.start->data->texture, mapCoord.x, mapCoord.y, &tileRect);
+                
+            }
+        }
+
+
+        mapLayer = mapLayer->next;
+    }
     return ret;
 }
 
@@ -64,11 +83,20 @@ bool Map::CleanUp()
     tileset = mapData.tilesets.start;
     
     while (tileset != NULL) {
-        RELEASE(tileset->data);
         tileset = tileset->next;
+        RELEASE(tileset->data);
     }
 
     mapData.tilesets.Clear();
+
+    // L05: TODO 2: clean up all layer data
+    ListItem<MapLayer*>* layerItem;
+    layerItem = mapData.layers.start;
+
+    while (layerItem != NULL) {
+        layerItem = layerItem->next;
+        RELEASE(layerItem);
+    }
 
     return true;
 }
@@ -121,6 +149,32 @@ bool Map::Load(SString mapFileName)
 
         }
 
+        // L06: TODO 3: Iterate all layers in the TMX and load each of them
+        for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
+
+            // L06: TODO 4: Implement a function that loads a single layer layer
+            //Load the attributes and saved in a new MapLayer
+            MapLayer* mapLayer = new MapLayer();
+            mapLayer->id = layerNode.attribute("id").as_int();
+            mapLayer->name = layerNode.attribute("name").as_string();
+            mapLayer->width = layerNode.attribute("width").as_int();
+            mapLayer->height = layerNode.attribute("height").as_int();
+
+            //Reserve the memory for the data 
+            mapLayer->tiles = new uint[mapLayer->width * mapLayer->height];
+            memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
+
+            //Iterate over all the tiles and assign the values in the data array
+            int i = 0;
+            for (pugi::xml_node tileNode = layerNode.child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
+                mapLayer->tiles[i] = tileNode.attribute("gid").as_uint();
+                i++;
+            }
+
+            //add the layer to the map
+            mapData.layers.Add(mapLayer);
+        }
+
         // L05: DONE 5: LOG all the data loaded iterate all tilesetsand LOG everything
         if (ret == true)
         {
@@ -139,6 +193,17 @@ bool Map::Load(SString mapFileName)
                 LOG("spacing : %d margin : %d", tileset->data->spacing, tileset->data->margin);
                 tileset = tileset->next;
             }
+
+            LOG("Layers----");
+
+            ListItem<MapLayer*>* mapLayer;
+            mapLayer = mapData.layers.start;
+
+            while (mapLayer != NULL) {
+                LOG("id : %d name : %s", mapLayer->data->id, mapLayer->data->name.GetString());
+                LOG("Layer width : %d Layer height : %d", mapLayer->data->width, mapLayer->data->height);
+                mapLayer = mapLayer->next;
+            }
         }
 
         if (mapFileXML) mapFileXML.reset();
@@ -148,29 +213,13 @@ bool Map::Load(SString mapFileName)
     return ret;
 }
 
-// L06: TODO 3: Implement a function that loads a single layer layer
-bool Map::LoadLayer(pugi::xml_node node, MapLayer* layer)
+// L06: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+iPoint Map::MapToWorld(int x, int y) const
 {
-    bool ret = true;
+    iPoint ret;
 
-    //Load the attributes
-
-    //Reserve the memory for the data 
-
-    //Iterate over all the tiles and assign the values
-
-    return ret;
-}
-
-// L06: TODO 4: Iterate all layers and load each of them
-bool Map::LoadAllLayers(pugi::xml_node mapNode) {
-    bool ret = true;
-
-    // Iterates the layer nodes in the XML 
-    // 
-        //Load the layer
-
-        //add the layer to the map
+    ret.x = x * mapData.tilewidth;
+    ret.y = y * mapData.tileheight;
 
     return ret;
 }
