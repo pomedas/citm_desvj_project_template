@@ -48,10 +48,11 @@ bool Map::Update(float dt)
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
 
+    // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+
     // iterates the layers in the map
     while (mapLayer != NULL) {
-
-        // L06: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+        //iterate all tiles in a layer
         for (int i = 0; i < mapData.width;i++) {
             for (int j = 0; j < mapData.height; j++) {
                 //Get the gid from tile
@@ -61,7 +62,7 @@ bool Map::Update(float dt)
                 //Get the screen coordinates from the tile coordinates
                 iPoint mapCoord = MapToWorld(i, j);
 
-                // L06: TODO 9: Complete the draw function
+                // L06: DONE 9: Complete the draw function
                 app->render->DrawTexture(mapData.tilesets.start->data->texture, mapCoord.x, mapCoord.y, &tileRect);
                 
             }
@@ -83,19 +84,20 @@ bool Map::CleanUp()
     tileset = mapData.tilesets.start;
     
     while (tileset != NULL) {
-        tileset = tileset->next;
         RELEASE(tileset->data);
+        tileset = tileset->next;
     }
 
     mapData.tilesets.Clear();
 
-    // L05: TODO 2: clean up all layer data
+    // L06: DONE 2: clean up all layer data
     ListItem<MapLayer*>* layerItem;
     layerItem = mapData.layers.start;
 
     while (layerItem != NULL) {
+        RELEASE(layerItem->data->tiles);
+        RELEASE(layerItem->data);
         layerItem = layerItem->next;
-        RELEASE(layerItem);
     }
 
     return true;
@@ -149,10 +151,10 @@ bool Map::Load(SString mapFileName)
 
         }
 
-        // L06: TODO 3: Iterate all layers in the TMX and load each of them
+        // L06: DONE 3: Iterate all layers in the TMX and load each of them
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
 
-            // L06: TODO 4: Implement a function that loads a single layer layer
+            // L06: DONE 4: Implement a function that loads a single layer layer
             //Load the attributes and saved in a new MapLayer
             MapLayer* mapLayer = new MapLayer();
             mapLayer->id = layerNode.attribute("id").as_int();
@@ -213,7 +215,7 @@ bool Map::Load(SString mapFileName)
     return ret;
 }
 
-// L06: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+// L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;

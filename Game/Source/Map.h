@@ -21,6 +21,8 @@ struct TileSet
 
     SDL_Texture* texture;
 
+    // L06: DONE 7: Implement the method that receives the gid and returns a Rect
+
     SDL_Rect GetRect(uint gid) {
         SDL_Rect rect = { 0 };
 
@@ -36,14 +38,14 @@ struct TileSet
 
 struct MapLayer
 {
-    // L06: TODO 1: Add the info to the MapLayer Struct
+    // L06: DONE 1: Add the info to the MapLayer Struct
     int id;
     SString name;
     int width;
     int height;
     uint* tiles;
 
-    // L06: TODO 6: Short function to get the gid value of x,y
+    // L06: DONE 6: Short function to get the gid value of x,y
     uint Get(int x, int y) const
     {
         return tiles[(y * width) + x];
@@ -58,7 +60,7 @@ struct MapData
     int tileheight;
     List<TileSet*> tilesets;
 
-    // L06: TODO 2: Add a list/array of layers to the map
+    // L06: DONE 2: Add a list/array of layers to the map
     List<MapLayer*> layers;
 };
 
@@ -89,7 +91,7 @@ public:
     // Load new map
     bool Load(SString mapFileName);
 
-    // L06: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+    // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
     iPoint MapToWorld(int x, int y) const;
 
 public: 
