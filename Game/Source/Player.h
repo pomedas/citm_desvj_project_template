@@ -24,6 +24,7 @@ public:
 	bool CleanUp();
 
 	// L07 TODO 6: Define OnCollision function for the player. 
+	void OnCollision(PhysBody* physA, PhysBody* physB);
 
 public:
 
@@ -31,11 +32,13 @@ public:
 	float speed = 0.2f;
 	SDL_Texture* texture = NULL;
 	pugi::xml_node config;
+	uint texW, texH;
 
 	//Audio fx
 	int pickCoinFxId;
 
 	// L07 TODO 5: Add physics to the player - declare a Physics body
+	PhysBody* pbody;
 };
 
 #endif // __PLAYER_H__

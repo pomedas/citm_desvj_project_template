@@ -13,6 +13,8 @@ enum class EntityType
 	UNKNOWN
 };
 
+class PhysBody;
+
 class Entity
 {
 public:
@@ -66,6 +68,12 @@ public:
 			CleanUp();
 		}
 	}
+
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
+
+	};
+
+
 
 public:
 

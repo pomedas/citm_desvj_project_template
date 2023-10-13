@@ -30,8 +30,10 @@ private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
+	uint texW, texH;
 
 	//TODO 4: Add a physics to an item
+	PhysBody* pbody;
 };
 
 #endif // __ITEM_H__
