@@ -6,8 +6,6 @@
 #include "Input.h"
 #include "Render.h"
 
-class PhysBody;
-
 enum class EntityType
 {
 	PLAYER,
@@ -68,11 +66,6 @@ public:
 			CleanUp();
 		}
 	}
-
-	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
-
-	};
-
 
 public:
 
