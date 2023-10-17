@@ -58,8 +58,11 @@ bool Map::Update(float dt)
             for (int j = 0; j < mapData.height; j++) {
                 //Get the gid from tile
                 int gid = mapLayer->data->Get(i, j);
+
+                //L08: TODO 3: Obtain the tile set using GetTilesetFromTileId
                 //Get the Rect from the tileSetTexture;
-                SDL_Rect tileRect = mapData.tilesets.start->data->GetRect(gid);
+                SDL_Rect tileRect = mapData.tilesets.start->data->GetRect(gid); // (!!) we are using always the first tileset in the list
+
                 //Get the screen coordinates from the tile coordinates
                 iPoint mapCoord = MapToWorld(i, j);
 
@@ -73,6 +76,14 @@ bool Map::Update(float dt)
         mapLayer = mapLayer->next;
     }
     return ret;
+}
+
+// L08: TODO 2: Implement function to the Tileset based on a tile id
+TileSet* Map::GetTilesetFromTileId(int gid) const
+{
+    TileSet* set = NULL;
+
+    return set;
 }
 
 // Called before quitting
@@ -163,6 +174,8 @@ bool Map::Load(SString mapFileName)
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
+            //L08: TODO 6 Call Load Layer Properties
+
             //Reserve the memory for the data 
             mapLayer->tiles = new uint[mapLayer->width * mapLayer->height];
             memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
@@ -241,5 +254,15 @@ iPoint Map::MapToWorld(int x, int y) const
 
     return ret;
 }
+
+// L08: TODO 6: Load a group of properties from a node and fill a list with it
+bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
+{
+    bool ret = false;
+
+    return ret;
+}
+
+// L08: TODO 7: Implement a method to get the value of a custom property
 
 

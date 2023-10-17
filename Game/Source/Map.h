@@ -36,6 +36,14 @@ struct TileSet
     }
 };
 
+// L08: TODO 5: Add attributes to the property structure
+struct Properties
+{
+
+    // L08: TODO 7: Method to ask for the value of a custom property
+
+};
+
 struct MapLayer
 {
     // L06: DONE 1: Add the info to the MapLayer Struct
@@ -93,6 +101,12 @@ public:
 
     // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
     iPoint MapToWorld(int x, int y) const;
+
+    // L08: TODO 2: Implement function to the Tileset based on a tile id
+    TileSet* GetTilesetFromTileId(int gid) const;
+
+    // L06: TODO 6: Load a group of properties 
+    bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
 public: 
     SString name;
