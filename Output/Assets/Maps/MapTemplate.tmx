@@ -1600,6 +1600,9 @@
   </data>
  </layer>
  <layer id="5" name="Collisions" width="64" height="24">
+  <properties>
+   <property name="Draw" type="bool" value="false"/>
+  </properties>
   <data>
    <tile gid="49"/>
    <tile gid="49"/>

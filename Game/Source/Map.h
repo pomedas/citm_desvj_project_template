@@ -36,11 +36,34 @@ struct TileSet
     }
 };
 
-// L08: TODO 5: Add attributes to the property structure
+// L08: DONE 5: Add attributes to the property structure
 struct Properties
 {
+    struct Property
+    {
+        SString name;
+        bool value; //We assume that we are going to work only with bool for the moment
+    };
+
+    List<Property*> propertyList;
+
+    ~Properties()
+    {
+        //...
+        ListItem<Property*>* property;
+        property = propertyList.start;
+
+        while (property != NULL)
+        {
+            RELEASE(property->data);
+            property = property->next;
+        }
+
+        propertyList.Clear();
+    }
 
     // L08: TODO 7: Method to ask for the value of a custom property
+    Property* GetProperty(const char* name);
 
 };
 
@@ -52,6 +75,7 @@ struct MapLayer
     int width;
     int height;
     uint* tiles;
+    Properties properties;
 
     // L06: DONE 6: Short function to get the gid value of x,y
     uint Get(int x, int y) const

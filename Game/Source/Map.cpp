@@ -53,22 +53,27 @@ bool Map::Update(float dt)
 
     // iterates the layers in the map
     while (mapLayer != NULL) {
-        //iterate all tiles in a layer
-        for (int i = 0; i < mapData.width;i++) {
-            for (int j = 0; j < mapData.height; j++) {
-                //Get the gid from tile
-                int gid = mapLayer->data->Get(i, j);
+        //Check if the property Draw exist get the value, if it's true draw the lawyer
+        if (mapLayer->data->properties.GetProperty("Draw") != NULL && mapLayer->data->properties.GetProperty("Draw")->value) {
+            //iterate all tiles in a layer
+            for (int i = 0; i < mapData.width; i++) {
+                for (int j = 0; j < mapData.height; j++) {
+                    //Get the gid from tile
+                    int gid = mapLayer->data->Get(i, j);
 
-                //L08: TODO 3: Obtain the tile set using GetTilesetFromTileId
-                //Get the Rect from the tileSetTexture;
-                SDL_Rect tileRect = mapData.tilesets.start->data->GetRect(gid); // (!!) we are using always the first tileset in the list
+                    //L08: DONE 3: Obtain the tile set using GetTilesetFromTileId
+                    //Get the Rect from the tileSetTexture;
+                    TileSet* tileSet = GetTilesetFromTileId(gid);
+                    SDL_Rect tileRect = tileSet->GetRect(gid);
+                    //SDL_Rect tileRect = mapData.tilesets.start->data->GetRect(gid); // (!!) we are using always the first tileset in the list
 
-                //Get the screen coordinates from the tile coordinates
-                iPoint mapCoord = MapToWorld(i, j);
+                    //Get the screen coordinates from the tile coordinates
+                    iPoint mapCoord = MapToWorld(i, j);
 
-                // L06: DONE 9: Complete the draw function
-                app->render->DrawTexture(mapData.tilesets.start->data->texture, mapCoord.x, mapCoord.y, &tileRect);
-                
+                    // L06: DONE 9: Complete the draw function
+                    app->render->DrawTexture(tileSet->texture, mapCoord.x, mapCoord.y, &tileRect);
+
+                }
             }
         }
 
@@ -78,10 +83,18 @@ bool Map::Update(float dt)
     return ret;
 }
 
-// L08: TODO 2: Implement function to the Tileset based on a tile id
+// L08: DONE 2: Implement function to the Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int gid) const
 {
     TileSet* set = NULL;
+
+    ListItem<TileSet*>* tileSet;
+    tileSet = mapData.tilesets.start;
+    while (tileSet != NULL) {
+        set = tileSet->data;
+        if (gid >= tileSet->data->firstgid && gid < tileSet->data->tilecount) break;
+        tileSet = tileSet->next;
+    }
 
     return set;
 }
@@ -153,6 +166,7 @@ bool Map::Load(SString mapFileName)
             tileset->tilewidth = tilesetNode.attribute("tilewidth").as_int();
             tileset->tileheight = tilesetNode.attribute("tileheight").as_int();
             tileset->columns = tilesetNode.attribute("columns").as_int();
+            tileset->tilecount = tilesetNode.attribute("tilecount").as_int();
 
             //Load Tileset image
             SString mapTex = path;
@@ -175,6 +189,7 @@ bool Map::Load(SString mapFileName)
             mapLayer->height = layerNode.attribute("height").as_int();
 
             //L08: TODO 6 Call Load Layer Properties
+            LoadProperties(layerNode, mapLayer->properties);
 
             //Reserve the memory for the data 
             mapLayer->tiles = new uint[mapLayer->width * mapLayer->height];
@@ -260,9 +275,33 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
     bool ret = false;
 
+    for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+    {
+        Properties::Property* p = new Properties::Property();
+        p->name = propertieNode.attribute("name").as_string();
+        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+
+        properties.propertyList.Add(p);
+    }
+
     return ret;
 }
 
 // L08: TODO 7: Implement a method to get the value of a custom property
+Properties::Property* Properties::GetProperty(const char* name)
+{
+    ListItem<Property*>* property = propertyList.start;
+    Property* p = NULL;
 
+    while (property)
+    {
+        if (property->data->name == name) {
+            p = property->data;
+            break;
+        }
+        property = property->next;
+    }
+
+    return p;
+}
 
