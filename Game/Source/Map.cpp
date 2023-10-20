@@ -153,6 +153,7 @@ bool Map::Load(SString mapFileName)
             tileset->tilewidth = tilesetNode.attribute("tilewidth").as_int();
             tileset->tileheight = tilesetNode.attribute("tileheight").as_int();
             tileset->columns = tilesetNode.attribute("columns").as_int();
+            tileset->tilecount = tilesetNode.attribute("tilecount").as_int();
 
             //Load Tileset image
             SString mapTex = path;
