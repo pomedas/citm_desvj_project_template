@@ -264,6 +264,8 @@ iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;
 
+    // L09: TODO 3: Get the screen coordinates of tile positions for isometric maps 
+
     ret.x = x * mapData.tilewidth;
     ret.y = y * mapData.tileheight;
 

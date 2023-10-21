@@ -7,6 +7,8 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
+// L09: TODO 2: Define a property to store the MapType and Load it from the map
+
 // L05: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -79,6 +81,9 @@ struct MapLayer
     uint* tiles;
     Properties properties;
 
+    // L09: TODO 2: Define a property to store the MapType and Load it from the map
+
+
     // L06: DONE 6: Short function to get the gid value of x,y
     uint Get(int x, int y) const
     {
@@ -140,8 +145,5 @@ private:
     MapData mapData;
     bool mapLoaded;
 };
-
-
-
 
 #endif // __MAP_H__
