@@ -8,6 +8,11 @@
 #include "PugiXml\src\pugixml.hpp"
 
 // L09: TODO 2: Define a property to store the MapType and Load it from the map
+enum MapOrientation
+{
+    ORTOGRAPHIC = 0,
+    ISOMETRIC
+};
 
 // L05: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
@@ -97,6 +102,7 @@ struct MapData
     List<TileSet*> tilesets;
 
     // L09: TODO 2: Define a property to store the MapType and Load it from the map
+    MapOrientation orientation; 
 
     // L06: DONE 2: Add a list/array of layers to the map
     List<MapLayer*> layers;
@@ -137,6 +143,9 @@ public:
 
     // L06: DONE 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
+
+    int GetTileWidth();
+    int GetTileHeight();
 
 public: 
     SString name;

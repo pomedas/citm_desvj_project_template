@@ -153,6 +153,17 @@ bool Map::Load(SString mapFileName)
         mapData.tileheight = mapFileXML.child("map").attribute("tileheight").as_int();
 
         // L09: TODO 2: Define a property to store the MapType and Load it from the map
+        SString orientationStr = mapFileXML.child("map").attribute("orientation").as_string();
+        if (orientationStr == "orthogonal") {
+            mapData.orientation = MapOrientation::ORTOGRAPHIC;
+        }
+        else if (orientationStr == "isometric") {
+            mapData.orientation = MapOrientation::ISOMETRIC;
+        }
+        else {
+            LOG("Map orientation not found");
+            ret = false; 
+        }
 
         // L05: DONE 4: Implement the LoadTileSet function to load the tileset properties
        // Iterate the Tileset
@@ -259,9 +270,15 @@ iPoint Map::MapToWorld(int x, int y) const
     iPoint ret;
 
     // L09: TODO 3: Get the screen coordinates of tile positions for isometric maps 
+    if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
+        ret.x = x * mapData.tilewidth;
+        ret.y = y * mapData.tileheight;
+    }
 
-    ret.x = x * mapData.tilewidth;
-    ret.y = y * mapData.tileheight;
+    if (mapData.orientation == MapOrientation::ISOMETRIC) {
+        ret.x = x * mapData.tilewidth / 2 - y * mapData.tilewidth / 2;
+        ret.y = x * mapData.tileheight / 2 + y * mapData.tileheight / 2;
+    }
 
     return ret;
 }
@@ -303,8 +320,29 @@ Properties::Property* Properties::GetProperty(const char* name)
 
 // L09: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
 iPoint Map::WorldToMap(int x, int y) {
+
     iPoint ret(0, 0);
 
+    if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
+        ret.x = x / mapData.tilewidth;
+        ret.y = y / mapData.tileheight;
+    }
+
+    if (mapData.orientation == MapOrientation::ISOMETRIC) {
+        float half_width = mapData.tilewidth / 2;
+        float half_height = mapData.tileheight / 2;
+        ret.x = int((x / half_width + y / half_height) / 2);
+        ret.y = int((y / half_height - (x / half_width)) / 2);
+    }
+
     return ret;
+}
+
+int Map::GetTileWidth() {
+    return mapData.tilewidth;
+}
+
+int Map::GetTileHeight() {
+    return mapData.tileheight;
 }
 
