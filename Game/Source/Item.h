@@ -31,9 +31,6 @@ private:
 	SDL_Texture* texture;
 	const char* texturePath;
 	uint texW, texH;
-
-	//L07 DONE 4: Add a physics to an item
-	PhysBody* pbody;
 };
 
 #endif // __ITEM_H__

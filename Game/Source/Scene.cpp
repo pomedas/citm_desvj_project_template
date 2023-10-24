@@ -65,6 +65,9 @@ bool Scene::Start()
 	textPosX = (float)windowW / 2 - (float)texW / 2;
 	textPosY = (float)windowH / 2 - (float)texH / 2;
 
+	// Texture to highligh mouse position 
+	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+
 	return true;
 }
 
@@ -92,8 +95,13 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
-	// Renders the image in the center of the screen 
-	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
+	// L09 TODO 6: Implement a method that repositions the player in the map with a mouse click
+
+	// Get the mouse position and obtain the map coordinate
+
+	// Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
+
+	//If mouse button is pressed modify player position
 
 	return true;
 }

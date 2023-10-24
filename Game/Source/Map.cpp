@@ -212,14 +212,8 @@ bool Map::Load(SString mapFileName)
         // L07 DONE 3: Create colliders      
         // L07 DONE 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
-        PhysBody* c1 = app->physics->CreateRectangle(224 + 128, 544 + 32, 256, 64, STATIC);
-        c1->ctype = ColliderType::PLATFORM;
-
-        PhysBody* c2 = app->physics->CreateRectangle(352 + 64, 384 + 32, 128, 64, STATIC);
-        c2->ctype = ColliderType::PLATFORM;
-
-        PhysBody* c3 = app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
-        c3->ctype = ColliderType::PLATFORM;
+        
+        // CALL TO CREATE COLLIDERS FROM MAP
 
           // L05: DONE 5: LOG all the data loaded iterate all tilesetsand LOG everything
         if (ret == true)
@@ -305,5 +299,12 @@ Properties::Property* Properties::GetProperty(const char* name)
     }
 
     return p;
+}
+
+// L09: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+iPoint Map::WorldToMap(int x, int y) {
+    iPoint ret(0, 0);
+
+    return ret;
 }
 

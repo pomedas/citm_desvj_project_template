@@ -81,9 +81,6 @@ struct MapLayer
     uint* tiles;
     Properties properties;
 
-    // L09: TODO 2: Define a property to store the MapType and Load it from the map
-
-
     // L06: DONE 6: Short function to get the gid value of x,y
     uint Get(int x, int y) const
     {
@@ -98,6 +95,8 @@ struct MapData
     int tilewidth;
     int tileheight;
     List<TileSet*> tilesets;
+
+    // L09: TODO 2: Define a property to store the MapType and Load it from the map
 
     // L06: DONE 2: Add a list/array of layers to the map
     List<MapLayer*> layers;
@@ -129,6 +128,9 @@ public:
 
     // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
     iPoint MapToWorld(int x, int y) const;
+
+    // L09: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+    iPoint WorldToMap(int x, int y);
 
     // L08: DONE 2: Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
