@@ -143,3 +143,7 @@ bool Scene::CleanUp()
 
 	return true;
 }
+
+iPoint Scene::GetPLayerPosition() {
+	return player->position;
+}

@@ -33,6 +33,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	iPoint GetPLayerPosition();
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;

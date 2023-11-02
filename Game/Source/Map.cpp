@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -27,8 +28,8 @@ bool Map::Awake(pugi::xml_node config)
     bool ret = true;
 
     //Initialize the path
-    frontier.Push(iPoint(19, 4));
-    visited.Add(iPoint(19, 4));
+    frontier.Push(iPoint(4,4));
+    visited.Add(iPoint(4,4));
 
     // L10 TODO 4: Initialize destination point
 
@@ -42,6 +43,10 @@ bool Map::Start() {
     mapPath += name;
     Load(mapPath);
 
+    //Loads texture to draw the path
+    pathTex = app->tex->Load("Assets/Maps/MapMetadataIso.png");
+
+
     return true;
 }
 
@@ -50,8 +55,8 @@ void Map::ResetPath()
     frontier.Clear();
     visited.Clear();
 
-    frontier.Push(iPoint(19, 4));
-    visited.Add(iPoint(19, 4));
+    frontier.Push(iPoint(4,4));
+    visited.Add(iPoint(4,4));
 }
 
 //Draw the visited nodes
@@ -65,12 +70,9 @@ void Map::DrawPath()
     while (item)
     {
         point = item->data;
-        TileSet* tileset = GetTilesetFromTileId(26);
-
-        SDL_Rect rec = tileset->GetRect(26);
         iPoint pos = MapToWorld(point.x, point.y);
-
-        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+        SDL_Rect rect = { 0,0,64,64 };
+        app->render->DrawTexture(pathTex, pos.x, pos.y, &rect);
 
         item = item->next;
     }
@@ -79,12 +81,9 @@ void Map::DrawPath()
     for (uint i = 0; i < frontier.Count(); ++i)
     {
         point = *(frontier.Peek(i));
-        TileSet* tileset = GetTilesetFromTileId(25);
-
-        SDL_Rect rec = tileset->GetRect(25);
         iPoint pos = MapToWorld(point.x, point.y);
-
-        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+        SDL_Rect rect = { 64,0,64,64 };
+        app->render->DrawTexture(pathTex, pos.x, pos.y, &rect);
     }
 
     // L10 TODO 4: Draw destination point
@@ -92,25 +91,90 @@ void Map::DrawPath()
 
 bool Map::IsWalkable(int x, int y) const
 {
-    bool isWalkable = true;
+    bool isWalkable = false;
     
     // L10: TODO 3: return true only if x and y are within map limits
     // and the tile is walkable (tile id 0 in the navigation layer)
+
+    ListItem<MapLayer*>* mapLayerItem;
+    mapLayerItem = mapData.layers.start;
+    MapLayer* navigationLayer = mapLayerItem->data;
+
+    //Search the layer in the map that contains information for navigation
+    while (mapLayerItem != NULL) {
+
+        if (mapLayerItem->data->properties.GetProperty("Navigation") != NULL && mapLayerItem->data->properties.GetProperty("Navigation")->value) {
+            navigationLayer = mapLayerItem->data;
+        }
+
+        mapLayerItem = mapLayerItem->next;
+    }
+
+    //Set isWalkable to true if the position is inside map limits and is a position that is not blocked in the navigation layer
+    int gid = navigationLayer->Get(x, y);
+    int blockedGid = 26;
+    if (x >= 0 && y >= 0 && x < mapData.width && y < mapData.height && gid != blockedGid) {
+        isWalkable = true;
+    }
 
     return isWalkable;
 }
 
 void Map::PropagateBFS()
 {
+    // L09 DONE 4: Check if we have reach a destination
+    bool foundDestination = false;
+
+    if (frontier.Count() > 0) {
+        iPoint frontierPoint = *(frontier.Peek(0));
+        iPoint playerPos = app->scene->GetPLayerPosition();
+        if (frontierPoint == WorldToMap(playerPos.x,playerPos.y)) {
+            foundDestination = true;
+        }
+    }
+
     // L10: TODO 1: If frontier queue contains elements
     // pop the last one and calculate its 4 neighbors
+    if (frontier.Count() > 0 && !foundDestination) {
 
-    // L10: TODO 2: For each neighbor, if not visited, add it
-    // to the frontier queue and visited list
+        iPoint frontierPoint;
+        frontier.Pop(frontierPoint);
 
+        List<iPoint> neighbors;
+        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x + 1, frontierPoint.y));
+        }
+        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y + 1));
+        }
+        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x - 1, frontierPoint.y));
+        }
+        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y - 1));
+        }
 
-    // L10 TODO 4: Check if we have reach a destination
+        // L10: TODO 2: For each neighbor, if not visited, add it
+        // to the frontier queue and visited list
+        ListItem<iPoint>* item = neighbors.start;
 
+        while (item != NULL)
+        {
+            if (visited.Find(item->data) == -1)
+            {
+                frontier.Push(item->data);
+                visited.Add(item->data);
+            }
+            item = item->next;
+        }
+
+        // L10 TODO 4: Check if we have reach a destination
+
+    }
 }
 
 bool Map::Update(float dt)
@@ -168,7 +232,7 @@ TileSet* Map::GetTilesetFromTileId(int gid) const
     tileSet = mapData.tilesets.start;
     while (tileSet != NULL) {
         set = tileSet->data;
-        if (gid >= tileSet->data->firstgid && gid < tileSet->data->tilecount) break;
+        if (gid >= tileSet->data->firstgid && gid < (tileSet->data->firstgid + tileSet->data->tilecount)) break;
         tileSet = tileSet->next;
     }
 
