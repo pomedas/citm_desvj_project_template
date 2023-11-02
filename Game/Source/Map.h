@@ -4,10 +4,12 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "Queue.h"
+#include "DynArray.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
-// L09: TODO 2: Define a property to store the MapType and Load it from the map
+// L09: DONE 2: Define a property to store the MapType and Load it from the map
 enum MapOrientation
 {
     ORTOGRAPHIC = 0,
@@ -101,7 +103,7 @@ struct MapData
     int tileheight;
     List<TileSet*> tilesets;
 
-    // L09: TODO 2: Define a property to store the MapType and Load it from the map
+    // L09: DONE 2: Define a property to store the MapType and Load it from the map
     MapOrientation orientation; 
 
     // L06: DONE 2: Add a list/array of layers to the map
@@ -135,7 +137,7 @@ public:
     // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
     iPoint MapToWorld(int x, int y) const;
 
-    // L09: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+    // L09: DONE 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
     iPoint WorldToMap(int x, int y);
 
     // L08: DONE 2: Implement function to the Tileset based on a tile id
@@ -143,6 +145,12 @@ public:
 
     // L06: DONE 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
+
+    // L10: BFS Pathfinding methods
+    void ResetPath();
+    void DrawPath();
+    bool IsWalkable(int x, int y) const;
+    void PropagateBFS();
 
     int GetTileWidth();
     int GetTileHeight();
@@ -155,6 +163,13 @@ private:
     // L05: DONE 1: Declare a variable data of the struct MapData
     MapData mapData;
     bool mapLoaded;
+
+    // L10: BFS Pathfinding variables
+    Queue<iPoint> frontier;
+    List<iPoint> visited;
+
+    // L10 TODO 4: Define destionation point
+
 };
 
 #endif // __MAP_H__

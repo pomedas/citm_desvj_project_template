@@ -26,6 +26,12 @@ bool Map::Awake(pugi::xml_node config)
     LOG("Loading Map Parser");
     bool ret = true;
 
+    //Initialize the path
+    frontier.Push(iPoint(19, 4));
+    visited.Add(iPoint(19, 4));
+
+    // L10 TODO 4: Initialize destination point
+
     return ret;
 }
 
@@ -37,6 +43,74 @@ bool Map::Start() {
     Load(mapPath);
 
     return true;
+}
+
+void Map::ResetPath()
+{
+    frontier.Clear();
+    visited.Clear();
+
+    frontier.Push(iPoint(19, 4));
+    visited.Add(iPoint(19, 4));
+}
+
+//Draw the visited nodes
+void Map::DrawPath()
+{
+    iPoint point;
+
+    // Draw visited
+    ListItem<iPoint>* item = visited.start;
+
+    while (item)
+    {
+        point = item->data;
+        TileSet* tileset = GetTilesetFromTileId(26);
+
+        SDL_Rect rec = tileset->GetRect(26);
+        iPoint pos = MapToWorld(point.x, point.y);
+
+        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+
+        item = item->next;
+    }
+
+    // Draw frontier
+    for (uint i = 0; i < frontier.Count(); ++i)
+    {
+        point = *(frontier.Peek(i));
+        TileSet* tileset = GetTilesetFromTileId(25);
+
+        SDL_Rect rec = tileset->GetRect(25);
+        iPoint pos = MapToWorld(point.x, point.y);
+
+        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+    }
+
+    // L10 TODO 4: Draw destination point
+}
+
+bool Map::IsWalkable(int x, int y) const
+{
+    bool isWalkable = true;
+    
+    // L10: TODO 3: return true only if x and y are within map limits
+    // and the tile is walkable (tile id 0 in the navigation layer)
+
+    return isWalkable;
+}
+
+void Map::PropagateBFS()
+{
+    // L10: TODO 1: If frontier queue contains elements
+    // pop the last one and calculate its 4 neighbors
+
+    // L10: TODO 2: For each neighbor, if not visited, add it
+    // to the frontier queue and visited list
+
+
+    // L10 TODO 4: Check if we have reach a destination
+
 }
 
 bool Map::Update(float dt)
@@ -76,10 +150,12 @@ bool Map::Update(float dt)
                 }
             }
         }
-
-
         mapLayer = mapLayer->next;
     }
+
+    //Draw the visited tiles
+    DrawPath();
+
     return ret;
 }
 
@@ -152,7 +228,7 @@ bool Map::Load(SString mapFileName)
         mapData.tilewidth = mapFileXML.child("map").attribute("tilewidth").as_int();
         mapData.tileheight = mapFileXML.child("map").attribute("tileheight").as_int();
 
-        // L09: TODO 2: Define a property to store the MapType and Load it from the map
+        // L09: DONE 2: Define a property to store the MapType and Load it from the map
         SString orientationStr = mapFileXML.child("map").attribute("orientation").as_string();
         if (orientationStr == "orthogonal") {
             mapData.orientation = MapOrientation::ORTOGRAPHIC;
@@ -269,7 +345,7 @@ iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;
 
-    // L09: TODO 3: Get the screen coordinates of tile positions for isometric maps 
+    // L09: DONE 3: Get the screen coordinates of tile positions for isometric maps 
     if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
         ret.x = x * mapData.tilewidth;
         ret.y = y * mapData.tileheight;
@@ -318,7 +394,7 @@ Properties::Property* Properties::GetProperty(const char* name)
     return p;
 }
 
-// L09: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+// L09: DONE 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
 iPoint Map::WorldToMap(int x, int y) {
 
     iPoint ret(0, 0);

@@ -68,6 +68,9 @@ bool Scene::Start()
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
 
+	//Center the camera con the isometric map center
+	app->render->camera.x += windowW / 2;
+
 	return true;
 }
 
@@ -95,7 +98,14 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
-	// L09 TODO 6: Implement a method that repositions the player in the map with a mouse click
+	// Pathfinding testing inputs
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)	app->map->ResetPath();
+
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)	app->map->PropagateBFS();
+
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT) app->map->PropagateBFS();
+
+	// L09 DONE 6: Implement a method that repositions the player in the map with a mouse click
 
 	// Get the mouse position and obtain the map coordinate
 	iPoint mousePos;
