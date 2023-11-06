@@ -167,6 +167,7 @@ private:
     // L10: BFS Pathfinding variables
     Queue<iPoint> frontier;
     List<iPoint> visited;
+    SDL_Texture* pathTex = nullptr;
 
     // L10 TODO 4: Define destionation point
 

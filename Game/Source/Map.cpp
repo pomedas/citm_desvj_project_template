@@ -42,6 +42,9 @@ bool Map::Start() {
     mapPath += name;
     Load(mapPath);
 
+    //Loads texture to draw the path
+    pathTex = app->tex->Load("Assets/Maps/MapMetadataIso.png");
+
     return true;
 }
 
@@ -65,12 +68,9 @@ void Map::DrawPath()
     while (item)
     {
         point = item->data;
-        TileSet* tileset = GetTilesetFromTileId(26);
-
-        SDL_Rect rec = tileset->GetRect(26);
         iPoint pos = MapToWorld(point.x, point.y);
-
-        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+        SDL_Rect rect = { 0,0,64,64 };
+        app->render->DrawTexture(pathTex, pos.x, pos.y, &rect);
 
         item = item->next;
     }
@@ -79,12 +79,9 @@ void Map::DrawPath()
     for (uint i = 0; i < frontier.Count(); ++i)
     {
         point = *(frontier.Peek(i));
-        TileSet* tileset = GetTilesetFromTileId(25);
-
-        SDL_Rect rec = tileset->GetRect(25);
         iPoint pos = MapToWorld(point.x, point.y);
-
-        app->render->DrawTexture(tileset->texture, pos.x, pos.y, &rec);
+        SDL_Rect rect = { 64,0,64,64 };
+        app->render->DrawTexture(pathTex, pos.x, pos.y, &rect);
     }
 
     // L10 TODO 4: Draw destination point
@@ -92,7 +89,7 @@ void Map::DrawPath()
 
 bool Map::IsWalkable(int x, int y) const
 {
-    bool isWalkable = true;
+    bool isWalkable = false;
     
     // L10: TODO 3: return true only if x and y are within map limits
     // and the tile is walkable (tile id 0 in the navigation layer)
@@ -168,7 +165,7 @@ TileSet* Map::GetTilesetFromTileId(int gid) const
     tileSet = mapData.tilesets.start;
     while (tileSet != NULL) {
         set = tileSet->data;
-        if (gid >= tileSet->data->firstgid && gid < tileSet->data->tilecount) break;
+        if (gid >= tileSet->data->firstgid && gid < (tileSet->data->firstgid + tileSet->data->tilecount)) break;
         tileSet = tileSet->next;
     }
 
