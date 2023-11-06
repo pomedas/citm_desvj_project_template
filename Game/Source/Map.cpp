@@ -92,7 +92,7 @@ TileSet* Map::GetTilesetFromTileId(int gid) const
     tileSet = mapData.tilesets.start;
     while (tileSet != NULL) {
         set = tileSet->data;
-        if (gid >= tileSet->data->firstgid && gid < tileSet->data->tilecount) break;
+        if (gid >= tileSet->data->firstgid && gid < (tileSet->data->firstgid + tileSet->data->tilecount)) break;
         tileSet = tileSet->next;
     }
 
