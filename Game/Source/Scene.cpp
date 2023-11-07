@@ -114,16 +114,16 @@ bool Scene::Update(float dt)
 	// Get the mouse position and obtain the map coordinate
 	iPoint mousePos;
 	app->input->GetMousePosition(mousePos.x, mousePos.y);
-	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x,
-										    mousePos.y - app->render->camera.y);
+	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x - app->map->GetTileWidth() / 2,
+		mousePos.y - app->render->camera.y - app->map->GetTileHeight() / 2);
 
 	// Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
 	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x - app->map->GetTileWidth() / 2, highlightedTileWorld.y);
+	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y + app->map->GetTileHeight() / 2);
 
 	//If mouse button is pressed modify player position
 	if (app->input->GetMouseButtonDown(1) == KEY_DOWN) {
-		player->position = iPoint(highlightedTileWorld.x - app->map->GetTileWidth() / 2, highlightedTileWorld.y - app->map->GetTileHeight());
+		player->position = iPoint(highlightedTileWorld.x, highlightedTileWorld.y - app->map->GetTileHeight() / 2);
 	}
 
 	return true;
