@@ -105,6 +105,10 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT) app->map->PropagateBFS();
 
+	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) app->map->PropagateDijkstra();
+
+	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) app->map->PropagateDijkstra();
+
 	// L09 DONE 6: Implement a method that repositions the player in the map with a mouse click
 
 	// Get the mouse position and obtain the map coordinate

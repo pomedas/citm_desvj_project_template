@@ -31,8 +31,6 @@ bool Map::Awake(pugi::xml_node config)
     frontier.Push(iPoint(4,4));
     visited.Add(iPoint(4,4));
 
-    // L10 TODO 4: Initialize destination point
-
     return ret;
 }
 
@@ -46,6 +44,23 @@ bool Map::Start() {
     //Loads texture to draw the path
     pathTex = app->tex->Load("Assets/Maps/MapMetadataIso.png");
 
+    //Load texture to show the path
+    tileX = app->tex->Load("Assets/Maps/x.png");
+
+    // Find the navigation layer
+    ListItem<MapLayer*>* mapLayerItem;
+    mapLayerItem = mapData.layers.start;
+    navigationLayer = mapLayerItem->data;
+
+    //Search the layer in the map that contains information for navigation
+    while (mapLayerItem != NULL) {
+
+        if (mapLayerItem->data->properties.GetProperty("Navigation") != NULL && mapLayerItem->data->properties.GetProperty("Navigation")->value) {
+            navigationLayer = mapLayerItem->data;
+            break;
+        }
+        mapLayerItem = mapLayerItem->next;
+    }
 
     return true;
 }
@@ -57,6 +72,9 @@ void Map::ResetPath()
 
     frontier.Push(iPoint(4,4));
     visited.Add(iPoint(4,4));
+
+    //initailize the cost matrix
+    memset(costSoFar, 0, sizeof(uint) * COST_MAP_SIZE * COST_MAP_SIZE);
 }
 
 //Draw the visited nodes
@@ -86,31 +104,31 @@ void Map::DrawPath()
         app->render->DrawTexture(pathTex, pos.x, pos.y, &rect);
     }
 
-    // L10 TODO 4: Draw destination point
+    // Draw path
+    for (uint i = 0; i < pathTiles.Count(); ++i)
+    {
+        iPoint pos = MapToWorld(pathTiles[i].x, pathTiles[i].y);
+        app->render->DrawTexture(tileX, pos.x, pos.y);
+    }
+
+}
+
+void Map::ComputePath(int x, int y)
+{
+    path.Clear();
+    iPoint goal = iPoint(x, y);
+
+    // L10: TODO 2: Follow the breadcrumps to goal back to the origin
+    // at each step, add the point into "pathTiles" dyn array (it will then draw automatically)
+
 }
 
 bool Map::IsWalkable(int x, int y) const
 {
     bool isWalkable = false;
     
-    // L10: TODO 3: return true only if x and y are within map limits
+    // L10: DONE 3: return true only if x and y are within map limits
     // and the tile is walkable (tile id 0 in the navigation layer)
-
-    ListItem<MapLayer*>* mapLayerItem;
-    mapLayerItem = mapData.layers.start;
-    MapLayer* navigationLayer = mapLayerItem->data;
-
-    //Search the layer in the map that contains information for navigation
-    while (mapLayerItem != NULL) {
-
-        if (mapLayerItem->data->properties.GetProperty("Navigation") != NULL && mapLayerItem->data->properties.GetProperty("Navigation")->value) {
-            navigationLayer = mapLayerItem->data;
-        }
-
-        mapLayerItem = mapLayerItem->next;
-    }
-
-    //Set isWalkable to true if the position is inside map limits and is a position that is not blocked in the navigation layer
     int gid = navigationLayer->Get(x, y);
     int blockedGid = 26;
     if (x >= 0 && y >= 0 && x < mapData.width && y < mapData.height && gid != blockedGid) {
@@ -120,9 +138,10 @@ bool Map::IsWalkable(int x, int y) const
     return isWalkable;
 }
 
+
 void Map::PropagateBFS()
 {
-    // L09 DONE 4: Check if we have reach a destination
+    // L10 DONE 4: Check if we have reach a destination
     bool foundDestination = false;
 
     if (frontier.Count() > 0) {
@@ -130,10 +149,12 @@ void Map::PropagateBFS()
         iPoint playerPos = app->scene->GetPLayerPosition();
         if (frontierPoint == WorldToMap(playerPos.x,playerPos.y)) {
             foundDestination = true;
+
+            // L10: TODO 2: When the destination is reach, call the function ComputePath
         }
     }
 
-    // L10: TODO 1: If frontier queue contains elements
+    // L10: DONE 1: If frontier queue contains elements
     // pop the last one and calculate its 4 neighbors
     if (frontier.Count() > 0 && !foundDestination) {
 
@@ -158,7 +179,7 @@ void Map::PropagateBFS()
             neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y - 1));
         }
 
-        // L10: TODO 2: For each neighbor, if not visited, add it
+        // L10: DONE 2: For each neighbor, if not visited, add it
         // to the frontier queue and visited list
         ListItem<iPoint>* item = neighbors.start;
 
@@ -168,13 +189,36 @@ void Map::PropagateBFS()
             {
                 frontier.Push(item->data);
                 visited.Add(item->data);
+
+                // L10: TODO 1: Record the direction to the previous node 
+                // with the new list "breadcrumps"
             }
             item = item->next;
         }
-
-        // L10 TODO 4: Check if we have reach a destination
-
     }
+}
+
+int Map::MovementCost(int x, int y) const
+{
+    int ret = -1;
+
+    if ((x >= 0) && (x < mapData.width) && (y >= 0) && (y < mapData.height))
+    {
+        int gid = navigationLayer->Get(x, y); 
+
+        if (gid == 25) ret = 10;
+        else ret = 1;
+    }
+
+    return ret;
+}
+
+void Map::PropagateDijkstra()
+{
+    // L10: TODO 3: Taking BFS as a reference, implement the Dijkstra algorithm
+    // use the 2 dimensional array "costSoFar" to track the accumulated costs
+    // on each cell (is already reset to 0 automatically)
+
 }
 
 bool Map::Update(float dt)

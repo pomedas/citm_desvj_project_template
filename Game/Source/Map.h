@@ -9,6 +9,8 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
+#define COST_MAP_SIZE 25
+
 // L09: DONE 2: Define a property to store the MapType and Load it from the map
 enum MapOrientation
 {
@@ -152,6 +154,11 @@ public:
     bool IsWalkable(int x, int y) const;
     void PropagateBFS();
 
+    // L11: Methods for BFS + Pathfinding and cost function for Dijkstra
+    int MovementCost(int x, int y) const;
+    void ComputePath(int x, int y);
+    void PropagateDijkstra();
+
     int GetTileWidth();
     int GetTileHeight();
 
@@ -169,8 +176,14 @@ private:
     List<iPoint> visited;
     SDL_Texture* pathTex = nullptr;
 
-    // L10 TODO 4: Define destionation point
-    iPoint destination;
+    // L11 Variables for Dijkstra
+    uint costSoFar[COST_MAP_SIZE][COST_MAP_SIZE];
+    DynArray<iPoint> pathTiles;
+
+    // Additional variables
+    MapLayer* navigationLayer;
+    List<iPoint> breadcrumbs;
+    SDL_Texture* tileX = nullptr;
 };
 
 #endif // __MAP_H__
