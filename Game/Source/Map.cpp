@@ -30,6 +30,7 @@ bool Map::Awake(pugi::xml_node config)
     //Initialize the path
     frontier.Push(iPoint(4,4));
     visited.Add(iPoint(4,4));
+    breadcrumbs.Add(iPoint(4, 4));
 
     return ret;
 }
@@ -72,6 +73,7 @@ void Map::ResetPath()
 
     frontier.Push(iPoint(4,4));
     visited.Add(iPoint(4,4));
+    breadcrumbs.Add(iPoint(4, 4));
 
     //initailize the cost matrix
     memset(costSoFar, 0, sizeof(uint) * COST_MAP_SIZE * COST_MAP_SIZE);
@@ -115,7 +117,7 @@ void Map::DrawPath()
 
 void Map::ComputePath(int x, int y)
 {
-    path.Clear();
+    pathTiles.Clear();
     iPoint goal = iPoint(x, y);
 
     // L10: TODO 2: Follow the breadcrumps to goal back to the origin
