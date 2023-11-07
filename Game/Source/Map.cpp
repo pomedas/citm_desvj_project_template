@@ -28,8 +28,9 @@ bool Map::Awake(pugi::xml_node config)
     bool ret = true;
 
     //Initialize the path
-    frontier.Push(iPoint(4,4));
+    frontier.Push(iPoint(4,4),0);
     visited.Add(iPoint(4,4));
+    breadcrumbs.Add(iPoint(4, 4));
 
     return ret;
 }
@@ -69,11 +70,13 @@ void Map::ResetPath()
 {
     frontier.Clear();
     visited.Clear();
+    pathTiles.Clear();
 
-    frontier.Push(iPoint(4,4));
+    frontier.Push(iPoint(4,4),0);
     visited.Add(iPoint(4,4));
+    breadcrumbs.Add(iPoint(4,4));
 
-    //initailize the cost matrix
+    //initialize the cost matrix
     memset(costSoFar, 0, sizeof(uint) * COST_MAP_SIZE * COST_MAP_SIZE);
 }
 
@@ -115,13 +118,21 @@ void Map::DrawPath()
 
 void Map::ComputePath(int x, int y)
 {
-    path.Clear();
+    pathTiles.Clear();
     iPoint goal = iPoint(x, y);
 
-    // L10: TODO 2: Follow the breadcrumps to goal back to the origin
+    // L10: DONE 2: Follow the breadcrumps to goal back to the origin
     // at each step, add the point into "pathTiles" dyn array (it will then draw automatically)
+    pathTiles.Add(goal);
+    int index = visited.Find(goal);
 
-}
+    while ((index >= 0) && (goal != breadcrumbs[index]))
+    {
+        goal = breadcrumbs[index];
+        pathTiles.Add(goal);
+        index = visited.Find(goal);
+    }
+ }
 
 bool Map::IsWalkable(int x, int y) const
 {
@@ -130,7 +141,6 @@ bool Map::IsWalkable(int x, int y) const
     // L10: DONE 3: return true only if x and y are within map limits
     // and the tile is walkable (tile id 0 in the navigation layer)
     int gid = navigationLayer->Get(x, y);
-    int blockedGid = 26;
     if (x >= 0 && y >= 0 && x < mapData.width && y < mapData.height && gid != blockedGid) {
         isWalkable = true;
     }
@@ -147,10 +157,11 @@ void Map::PropagateBFS()
     if (frontier.Count() > 0) {
         iPoint frontierPoint = *(frontier.Peek(0));
         iPoint playerPos = app->scene->GetPLayerPosition();
-        if (frontierPoint == WorldToMap(playerPos.x,playerPos.y)) {
+        if (frontierPoint == WorldToMap(playerPos.x,playerPos.y + GetTileHeight() / 2)) {
             foundDestination = true;
 
-            // L10: TODO 2: When the destination is reach, call the function ComputePath
+            // L10: DONE 2: When the destination is reach, call the function ComputePath
+            ComputePath(frontierPoint.x, frontierPoint.y);
         }
     }
 
@@ -187,11 +198,12 @@ void Map::PropagateBFS()
         {
             if (visited.Find(item->data) == -1)
             {
-                frontier.Push(item->data);
+                frontier.Push(item->data,0);
                 visited.Add(item->data);
 
-                // L10: TODO 1: Record the direction to the previous node 
+                // L10: DONE 1: Record the direction to the previous node 
                 // with the new list "breadcrumps"
+                breadcrumbs.Add(frontierPoint);
             }
             item = item->next;
         }
@@ -206,7 +218,9 @@ int Map::MovementCost(int x, int y) const
     {
         int gid = navigationLayer->Get(x, y); 
 
-        if (gid == 25) ret = 10;
+        if (gid == highCostGid) {
+            ret = 2;
+        }
         else ret = 1;
     }
 
@@ -215,10 +229,66 @@ int Map::MovementCost(int x, int y) const
 
 void Map::PropagateDijkstra()
 {
-    // L10: TODO 3: Taking BFS as a reference, implement the Dijkstra algorithm
+    // L10: DONE 3: Taking BFS as a reference, implement the Dijkstra algorithm
     // use the 2 dimensional array "costSoFar" to track the accumulated costs
     // on each cell (is already reset to 0 automatically)
 
+    bool foundDestination = false;
+
+    if (frontier.Count() > 0) {
+        iPoint frontierPoint = *(frontier.Peek(0));
+        iPoint playerPos = app->scene->GetPLayerPosition();
+        if (frontierPoint == WorldToMap(playerPos.x, playerPos.y + GetTileHeight() / 2)) {
+            foundDestination = true;
+
+            // L10: DONE 2: When the destination is reach, call the function ComputePath
+            ComputePath(frontierPoint.x, frontierPoint.y);
+        }
+    }
+
+    // L10: DONE 1: If frontier queue contains elements
+    // pop the last one and calculate its 4 neighbors
+    if (frontier.Count() > 0 && !foundDestination) {
+
+        iPoint frontierPoint;
+        frontier.Pop(frontierPoint);
+
+        List<iPoint> neighbors;
+        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x + 1, frontierPoint.y));
+        }
+        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y + 1));
+        }
+        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x - 1, frontierPoint.y));
+        }
+        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) {
+            iPoint p;
+            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y - 1));
+        }
+
+        // L10: DONE 2: For each neighbor, if not visited, add it
+        // to the frontier queue and visited list
+        ListItem<iPoint>* item = neighbors.start;
+
+        while (item != NULL)
+        {
+            int cost = MovementCost(item->data.x, item->data.y);
+
+            if (visited.Find(item->data) == -1 || cost < costSoFar[item->data.x][item->data.y])
+            {
+                costSoFar[item->data.x][item->data.y] = cost;
+                frontier.Push(item->data,cost);
+                visited.Add(item->data);
+                breadcrumbs.Add(frontierPoint);
+            }
+            item = item->next;
+        }
+    }
 }
 
 bool Map::Update(float dt)

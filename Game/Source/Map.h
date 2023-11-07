@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
-#include "Queue.h"
+#include "PQueue.h"
 #include "DynArray.h"
 
 #include "PugiXml\src\pugixml.hpp"
@@ -165,6 +165,8 @@ public:
 public: 
     SString name;
     SString path;
+    List<iPoint> breadcrumbs;
+    List<iPoint> visited;
 
 private:
     // L05: DONE 1: Declare a variable data of the struct MapData
@@ -172,18 +174,20 @@ private:
     bool mapLoaded;
 
     // L10: BFS Pathfinding variables
-    Queue<iPoint> frontier;
-    List<iPoint> visited;
+    PQueue<iPoint> frontier;
+
     SDL_Texture* pathTex = nullptr;
 
     // L11 Variables for Dijkstra
     uint costSoFar[COST_MAP_SIZE][COST_MAP_SIZE];
-    DynArray<iPoint> pathTiles;
+    List<iPoint> pathTiles;
 
     // Additional variables
     MapLayer* navigationLayer;
-    List<iPoint> breadcrumbs;
+
     SDL_Texture* tileX = nullptr;
+    int highCostGid = 25;
+    int blockedGid = 26;
 };
 
 #endif // __MAP_H__
