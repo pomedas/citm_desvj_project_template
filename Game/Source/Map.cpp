@@ -70,6 +70,7 @@ void Map::ResetPath()
 {
     frontier.Clear();
     visited.Clear();
+    breadcrumbs.Clear();
     pathTiles.Clear();
 
     frontier.Push(iPoint(4,4),0);
