@@ -166,7 +166,7 @@ public:
     void PropagateDijkstra();
 
     // L12
-    void PropagateAStar(int heuristic); 
+    void PropagateAStar(ASTART_HEURISTICS heuristic); 
 
     int GetTileWidth();
     int GetTileHeight();

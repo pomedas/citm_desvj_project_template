@@ -174,22 +174,10 @@ void Map::PropagateBFS()
         frontier.Pop(frontierPoint);
 
         List<iPoint> neighbors;
-        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x + 1, frontierPoint.y));
-        }
-        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y + 1));
-        }
-        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x - 1, frontierPoint.y));
-        }
-        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y - 1));
-        }
+        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) neighbors.Add(iPoint(frontierPoint.x + 1, frontierPoint.y));
+        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) neighbors.Add(iPoint(frontierPoint.x, frontierPoint.y + 1));
+        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) neighbors.Add(iPoint(frontierPoint.x - 1, frontierPoint.y));
+        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) neighbors.Add(iPoint(frontierPoint.x, frontierPoint.y - 1));
 
         // L10: DONE 2: For each neighbor, if not visited, add it
         // to the frontier queue and visited list
@@ -255,22 +243,10 @@ void Map::PropagateDijkstra()
         frontier.Pop(frontierPoint);
 
         List<iPoint> neighbors;
-        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x + 1, frontierPoint.y));
-        }
-        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y + 1));
-        }
-        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x - 1, frontierPoint.y));
-        }
-        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) {
-            iPoint p;
-            neighbors.Add(p.Create(frontierPoint.x, frontierPoint.y - 1));
-        }
+        if (IsWalkable(frontierPoint.x + 1, frontierPoint.y)) neighbors.Add(iPoint(frontierPoint.x + 1, frontierPoint.y));
+        if (IsWalkable(frontierPoint.x, frontierPoint.y + 1)) neighbors.Add(iPoint(frontierPoint.x, frontierPoint.y + 1));
+        if (IsWalkable(frontierPoint.x - 1, frontierPoint.y)) neighbors.Add(iPoint(frontierPoint.x - 1, frontierPoint.y));
+        if (IsWalkable(frontierPoint.x, frontierPoint.y - 1)) neighbors.Add(iPoint(frontierPoint.x, frontierPoint.y - 1));
 
         // L10: DONE 2: For each neighbor, if not visited, add it
         // to the frontier queue and visited list
@@ -292,7 +268,7 @@ void Map::PropagateDijkstra()
     }
 }
 
-void Map::PropagateAStar(int heuristic)
+void Map::PropagateAStar(ASTART_HEURISTICS heuristic)
 {
     // L12: TODO 2: Implement AStar algorithm
     // Consider the different heuristics
