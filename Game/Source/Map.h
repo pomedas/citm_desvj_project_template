@@ -11,6 +11,12 @@
 
 #define COST_MAP_SIZE 25
 
+enum ASTART_HEURISTICS {
+    MANHATTAN = 0,
+    EUCLIDEAN, 
+    SQUARED
+};
+
 // L09: DONE 2: Define a property to store the MapType and Load it from the map
 enum MapOrientation
 {
@@ -158,6 +164,9 @@ public:
     int MovementCost(int x, int y) const;
     void ComputePath(int x, int y);
     void PropagateDijkstra();
+
+    // L12
+    void PropagateAStar(int heuristic); 
 
     int GetTileWidth();
     int GetTileHeight();

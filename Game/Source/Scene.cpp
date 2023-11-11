@@ -109,6 +109,18 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) app->map->PropagateDijkstra();
 
+	// Propagate A* with distance calculation 1
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::MANHATTAN);
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::MANHATTAN);
+
+	// Propagate A* with distance calculation 2
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::EUCLIDEAN);
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::EUCLIDEAN);
+
+	// Propagate A* with distance calculation 3
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::SQUARED);
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::SQUARED);
+
 	// L09 DONE 6: Implement a method that repositions the player in the map with a mouse click
 
 	// Get the mouse position and obtain the map coordinate

@@ -292,6 +292,14 @@ void Map::PropagateDijkstra()
     }
 }
 
+void Map::PropagateAStar(int heuristic)
+{
+    // L12: TODO 2: Implement AStar algorithm
+    // Consider the different heuristics
+
+
+}
+
 bool Map::Update(float dt)
 {
     bool ret = true;
