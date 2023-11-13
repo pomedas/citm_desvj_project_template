@@ -9,14 +9,6 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
-#define COST_MAP_SIZE 25
-
-enum ASTART_HEURISTICS {
-    MANHATTAN = 0,
-    EUCLIDEAN, 
-    SQUARED
-};
-
 // L09: DONE 2: Define a property to store the MapType and Load it from the map
 enum MapOrientation
 {
@@ -154,49 +146,17 @@ public:
     // L06: DONE 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-    // L10: BFS Pathfinding methods
-    void ResetPath();
-    void DrawPath();
-    bool IsWalkable(int x, int y) const;
-    void PropagateBFS();
-
-    // L11: Methods for BFS + Pathfinding and cost function for Dijkstra
-    int MovementCost(int x, int y) const;
-    void ComputePath(int x, int y);
-    void PropagateDijkstra();
-
-    // L12
-    void PropagateAStar(ASTART_HEURISTICS heuristic); 
-
     int GetTileWidth();
     int GetTileHeight();
 
 public: 
     SString name;
     SString path;
-    List<iPoint> breadcrumbs;
-    List<iPoint> visited;
 
 private:
     // L05: DONE 1: Declare a variable data of the struct MapData
     MapData mapData;
     bool mapLoaded;
-
-    // L10: BFS Pathfinding variables
-    PQueue<iPoint> frontier;
-
-    SDL_Texture* pathTex = nullptr;
-
-    // L11 Variables for Dijkstra
-    uint costSoFar[COST_MAP_SIZE][COST_MAP_SIZE];
-    List<iPoint> pathTiles;
-
-    // Additional variables
-    MapLayer* navigationLayer;
-
-    SDL_Texture* tileX = nullptr;
-    int highCostGid = 25;
-    int blockedGid = 26;
-};
+ };
 
 #endif // __MAP_H__

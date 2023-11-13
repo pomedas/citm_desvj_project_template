@@ -68,9 +68,6 @@ bool Scene::Start()
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
 
-	//Center the camera con the isometric map center
-	app->render->camera.x += windowW / 2;
-
 	return true;
 }
 
@@ -98,51 +95,22 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
-	// Pathfinding testing inputs
-	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)	app->map->ResetPath();
-
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)	app->map->PropagateBFS();
-
-	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT) app->map->PropagateBFS();
-
-	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) app->map->PropagateDijkstra();
-
-	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) app->map->PropagateDijkstra();
-
-	// Propagate A* with distance calculation 1
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::MANHATTAN);
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::MANHATTAN);
-
-	// Propagate A* with distance calculation 2
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::EUCLIDEAN);
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::EUCLIDEAN);
-
-	// Propagate A* with distance calculation 3
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) app->map->PropagateAStar(ASTART_HEURISTICS::SQUARED);
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) app->map->PropagateAStar(ASTART_HEURISTICS::SQUARED);
-
 	// L09 DONE 6: Implement a method that repositions the player in the map with a mouse click
 
 	// Get the mouse position and obtain the map coordinate
 	iPoint mousePos;
 	app->input->GetMousePosition(mousePos.x, mousePos.y);
-	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x - app->map->GetTileWidth() / 2,
-										    mousePos.y - app->render->camera.y - app->map->GetTileHeight() / 2);
+	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x,
+										    mousePos.y - app->render->camera.y);
 
 	// Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
 	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y + app->map->GetTileHeight() / 2);
+	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
 
 	//If mouse button is pressed modify player position
 	if (app->input->GetMouseButtonDown(1) == KEY_DOWN) {
-		player->position = iPoint(highlightedTileWorld.x, highlightedTileWorld.y - app->map->GetTileHeight() / 2);
+		player->position = iPoint(highlightedTileWorld.x, highlightedTileWorld.y);
 	}
-
-	//LOG("(%d,%d)(%d,%d)", mousePos.x, mousePos.y,mouseTile.x, mouseTile.y);
-
-	int index = app->map->visited.Find(mouseTile);
-	if (index != -1) LOG("(%d,%d)", app->map->breadcrumbs[index].x, app->map->breadcrumbs[index].y);
-	else LOG("-1");
 
 	return true;
 }
