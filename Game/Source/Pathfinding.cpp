@@ -81,21 +81,21 @@ void PathFinding::ClearLastPath()
 // ----------------------------------------------------------------------------------
 int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-	// L12: TODO 1: if origin or destination are not walkable, return -1
+	// L13: TODO 1: if origin or destination are not walkable, return -1
 
-	// L12: TODO 2: Create two lists: open, close
+	// L13: TODO 2: Create two lists: open, close
 	// Add the origin tile to open
 	// Iterate while we have tile in the open list
 
-	// L12: TODO 3: Move the lowest score cell from open list to the closed list
+	// L13: TODO 3: Move the lowest score cell from open list to the closed list
 
-	// L12: TODO 4: If we just added the destination, we are done!
+	// L13: TODO 4: If we just added the destination, we are done!
 	// Backtrack to create the final path
 	// Use the Pathnode::parent and Flip() the path when you are finish
 
-	// L12: TODO 5: Fill a list of all adjancent nodes
+	// L13: TODO 5: Fill a list of all adjancent nodes
 
-	// L12: TODO 6: Iterate adjancent nodes:
+	// L13: TODO 6: Iterate adjancent nodes:
 	// ignore nodes in the closed list
 	// If it is NOT found, calculate its F and add it to the open list
 	// If it is already in the open list, check if it is a better path (compare G)
