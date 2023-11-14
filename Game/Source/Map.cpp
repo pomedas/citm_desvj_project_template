@@ -32,13 +32,19 @@ bool Map::Awake(pugi::xml_node config)
 
 bool Map::Start() {
 
-    //Initialize pathfinding 
-    pathfinding = new PathFinding();
-
     //Calls the functon to load the map, make sure that the filename is assigned
     SString mapPath = path;
     mapPath += name;
     Load(mapPath);
+
+    //Initialize pathfinding 
+    pathfinding = new PathFinding();
+    
+    //Initialize the navigation map
+    uchar* navigationMap = NULL;
+    CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
+    pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
+    RELEASE_ARRAY(navigationMap);
 
     return true;
 }
@@ -276,11 +282,6 @@ bool Map::Load(SString mapFileName)
             }
             mapLayerItem = mapLayerItem->next;
         }
-
-        //Sets the Navigation map
-        uchar* navigationMap = NULL;
-        CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
-        pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
 
         //Resets the map
         if (mapFileXML) mapFileXML.reset();
