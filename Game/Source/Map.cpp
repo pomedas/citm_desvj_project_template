@@ -220,7 +220,7 @@ int Map::MovementCost(int x, int y) const
         int gid = navigationLayer->Get(x, y); 
 
         if (gid == highCostGid) {
-            ret = 2;
+            ret = 5;
         }
         else ret = 1;
     }
@@ -278,7 +278,7 @@ void Map::PropagateDijkstra()
 
         while (item != NULL)
         {
-            int cost = MovementCost(item->data.x, item->data.y);
+            int cost = costSoFar[frontierPoint.x][frontierPoint.y] + MovementCost(item->data.x, item->data.y);
 
             if (visited.Find(item->data) == -1 || cost < costSoFar[item->data.x][item->data.y])
             {

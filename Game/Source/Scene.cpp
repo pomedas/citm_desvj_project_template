@@ -124,6 +124,7 @@ bool Scene::Update(float dt)
 	//If mouse button is pressed modify player position
 	if (app->input->GetMouseButtonDown(1) == KEY_DOWN) {
 		player->position = iPoint(highlightedTileWorld.x, highlightedTileWorld.y - app->map->GetTileHeight() / 2);
+		app->map->ResetPath();
 	}
 
 	//LOG("(%d,%d)(%d,%d)", mousePos.x, mousePos.y,mouseTile.x, mouseTile.y);
