@@ -254,7 +254,7 @@ void Map::PropagateDijkstra()
 
         while (item != NULL)
         {
-            int cost = MovementCost(item->data.x, item->data.y);
+            int cost = costSoFar[frontierPoint.x][frontierPoint.y] + MovementCost(item->data.x, item->data.y);
 
             if (visited.Find(item->data) == -1 || cost < costSoFar[item->data.x][item->data.y])
             {
@@ -304,10 +304,10 @@ void Map::PropagateAStar(ASTART_HEURISTICS heuristic)
         while (item != NULL)
         {
             // the movement cost from the start point A to the current tile.
-            int g = costSoFar[item->data.x][item->data.y] + MovementCost(item->data.x, item->data.y);
+            int g = costSoFar[frontierPoint.x][frontierPoint.y] + MovementCost(item->data.x, item->data.y);;
 
             // the estimated movement cost from the current square to the destination point.
-            int h;
+            int h = 0;
 
             switch (heuristic)
             {
