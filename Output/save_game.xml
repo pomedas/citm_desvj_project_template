@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- L02: TODO 4: Create a simulation xml file to read -->
+<!-- L14: TODO 4: Create a xml file to read -->
 <game_state>
 	<input />
 	<window />

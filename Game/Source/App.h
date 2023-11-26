@@ -74,6 +74,9 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
+	// L14: TODO 1: Declare the methods LoadRequest() and SaveRequest() to request and call the Load / Save the game state at the end of the frame
+
+
 public:
 
 	// L03: DONE 1: Add the EntityManager Module to App

@@ -194,7 +194,7 @@ void App::FinishUpdate()
 
 	// L02: DONE 1: Cap the framerate of the gameloop
 	// L02: DONE 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
-
+	
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
 		uint32 delay = (uint32) (maxFrameDuration - currentDt);
@@ -203,7 +203,7 @@ void App::FinishUpdate()
 		SDL_Delay(delay);
 		//LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
 	}
-
+	
 
     // L1: DONE 4: Calculate:
 	// Amount of frames since startup
@@ -349,4 +349,12 @@ const char* App::GetOrganization() const
 	return organization.GetString();
 }
 
+// L14: TODO 1: Implement the methods LoadRequest() and SaveRequest() to request and call the Load / Save the game state at the end of the frame
+// The real execution of load / save will be implemented in TODO 5 and 7
+
+// L03: TODO 5: Implement the method LoadFromFile() to actually load a xml file
+// then call all the modules to load themselves
+
+// L03: TODO 7: Implement the xml save method SaveToFile() for current state
+// check https://pugixml.org/docs/quickstart.html#modify
 

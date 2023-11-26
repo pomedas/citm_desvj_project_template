@@ -229,3 +229,9 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	return ret;
 }
+
+// L14: TODO 6: Implement a method to load the state
+// for now load camera's x and y
+
+// L14: TODO 8: Create a method to save the state of the renderer
+// using append_child and append_attribute
