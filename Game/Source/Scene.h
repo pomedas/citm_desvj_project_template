@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Player.h"
 #include "GuiControl.h"
+#include "GuiControlButton.h"
 
 struct SDL_Texture;
 
@@ -51,7 +52,7 @@ private:
 	Player* player;
 
 	// L15: TODO 2: Declare a GUI Control Button 
-
+	GuiControlButton* gcButtom;
 };
 
 #endif // __SCENE_H__

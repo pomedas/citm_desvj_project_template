@@ -11,6 +11,7 @@
 #include "Defs.h"
 #include "Log.h"
 #include "GuiControl.h"
+#include "GuiManager.h"
 
 Scene::Scene() : Module()
 {
@@ -69,8 +70,10 @@ bool Scene::Start()
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
 
-	// L15: TODO 2: Instantiate a new GuiControlButton in the Scene
+	// L15: DONE 2: Instantiate a new GuiControlButton in the Scene
 
+	SDL_Rect btPos = { windowW / 2 - 60, windowH / 2 - 10, 120,20};
+	gcButtom = (GuiControlButton*) app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
 
 	return true;
 }
@@ -127,7 +130,7 @@ bool Scene::Update(float dt)
 		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
 	}
 	
-	// L14: TODO 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
+	// L14: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 
@@ -159,7 +162,8 @@ iPoint Scene::GetPLayerPosition() {
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-	// L15: TODO 5: Implement the OnGuiMouseClickEvent method
+	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
+	LOG("Press Gui Control: %d", control->id);
 
 	return true;
 }
