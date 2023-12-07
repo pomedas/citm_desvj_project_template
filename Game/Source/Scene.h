@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Player.h"
+#include "GuiControl.h"
 
 struct SDL_Texture;
 
@@ -33,7 +34,11 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Return the player position
 	iPoint GetPLayerPosition();
+
+	// Handles multiple Gui Event methods
+	bool OnGuiMouseClickEvent(GuiControl* control);
 
 private:
 	SDL_Texture* img;
@@ -44,6 +49,8 @@ private:
 
 	//L03: DONE 3b: Declare a Player attribute
 	Player* player;
+
+	// L15: TODO 2: Declare a GUI Control Button 
 
 };
 

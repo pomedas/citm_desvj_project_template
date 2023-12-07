@@ -69,7 +69,6 @@ public:
 		return true;
 	}
 
-
 public:
 
 	SString name;

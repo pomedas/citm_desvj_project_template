@@ -22,6 +22,7 @@ class EntityManager;
 class Map;
 //L07 DONE 2: Add Physics module
 class Physics;
+class GuiManager;
 
 class App
 {
@@ -104,6 +105,7 @@ public:
 	Map* map;
 	//L07 DONE 2: Add Physics module
 	Physics* physics;
+	GuiManager* guiManager;
 
 private:
 

@@ -10,6 +10,7 @@
 
 #include "Defs.h"
 #include "Log.h"
+#include "GuiControl.h"
 
 Scene::Scene() : Module()
 {
@@ -67,6 +68,9 @@ bool Scene::Start()
 
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+
+	// L15: TODO 2: Instantiate a new GuiControlButton in the Scene
+
 
 	return true;
 }
@@ -151,4 +155,11 @@ bool Scene::CleanUp()
 
 iPoint Scene::GetPLayerPosition() {
 	return player->position;
+}
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	// L15: TODO 5: Implement the OnGuiMouseClickEvent method
+
+	return true;
 }
