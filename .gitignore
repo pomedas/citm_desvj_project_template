@@ -32,6 +32,7 @@
 !Game/Source/External/Box2D/libx86/DebugLib/Box2D.pdb
 !Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.lib
 !Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.pdb
+!Game/Source/External/SDL_ttf/libx86/SDL2_ttf.lib
 
 # Executables
 *.exe
