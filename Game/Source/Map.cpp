@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Scene.h"
+#include "Optick/include/optick.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -51,6 +52,7 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+    OPTICK_CATEGORY("Map", Optick::Category::GameLogic)
     bool ret = true;
 
     if(mapLoaded == false)

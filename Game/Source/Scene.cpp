@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Map.h"
 #include "Item.h"
+#include "Optick/include/optick.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -87,6 +88,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	OPTICK_EVENT();
 	//L02 DONE 3: Make the camera movement independent of framerate
 	float camSpeed = 1; 
 
